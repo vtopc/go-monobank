@@ -49,8 +49,8 @@ func (a *Account) String() string {
 	return "Account: " + a.ID + "\n" +
 		"Валюта: " + currency + "\n" +
 		// "Кешбек: " + a.CashbackType + "\n" +
-		fmt.Sprintf("Баланс(чистий): %.2f %s\n", toBanknote(a.Balance-a.CreditLimit, rate), currency) + // TODO: Власні кошти
-		fmt.Sprintf("Баланс(з кредитним лімітом): %.2f %s\n", toBanknote(a.Balance, rate), currency) + // TODO: Баланс
+		fmt.Sprintf("Власні кошти: %.2f %s\n", toBanknote(a.Balance-a.CreditLimit, rate), currency) +
+		fmt.Sprintf("Баланс: %.2f %s\n", toBanknote(a.Balance, rate), currency) +
 		fmt.Sprintf("Кредитний ліміт: %.2f %s\n", toBanknote(a.CreditLimit, rate), currency)
 }
 
