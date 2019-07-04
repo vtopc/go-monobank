@@ -13,7 +13,7 @@ type Iface interface {
 	// Currency https://api.monobank.ua/docs/#/definitions/CurrencyInfo
 	Currency() ([]byte, error)
 
-	// https://api.monobank.ua/docs/#/definitions/UserInfo
+	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
 	ClientInfo() (*ClientInfo, error)
 }
 
