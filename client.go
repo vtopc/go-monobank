@@ -16,13 +16,16 @@ type Client struct {
 	auth Authorizer
 }
 
+// New - returns new monobank Client
 // TODO: replace auth with opts?
 func New(client *http.Client, auth Authorizer) Client {
-	c := Client{auth: auth}
+	c := Client{c: client, auth: auth}
 
-	if client != nil {
-		c.c = client
-	} else {
+	if c.auth == nil {
+		c.auth = NewNoopAuthorizer()
+	}
+
+	if c.c == nil {
 		c.c = &http.Client{
 			Timeout: 30 * time.Second,
 		}

@@ -17,6 +17,10 @@ type Iface interface {
 	ClientInfo() (*ClientInfo, error)
 }
 
+// checks that Client satisfies interface
+// TODO: move to test?
+var _ Iface = Client{}
+
 func (c Client) Currency() ([]byte, error) {
 	const uri = baseURL + "/bank/currency"
 
@@ -46,7 +50,7 @@ func (c Client) Currency() ([]byte, error) {
 	return prettyJSON.Bytes(), nil
 }
 
-func (c Client) ClientInfo(token string) (*ClientInfo, error) {
+func (c Client) ClientInfo() (*ClientInfo, error) {
 	const uri = baseURL + "/personal/client-info"
 
 	req, err := http.NewRequest(http.MethodGet, uri, nil)
