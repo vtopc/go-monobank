@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"time"
 
 	"github.com/rmg/iso4217"
 )
@@ -19,6 +20,21 @@ type Account struct {
 	CashbackType string `json:"cashbackType"`
 	Balance      int64  `json:"balance"`
 	CreditLimit  int64  `json:"creditLimit"`
+}
+
+// Statement - transaction
+type Statement struct {
+	ID              string    `json:"id"`
+	Time            time.Time `json:"time"`
+	Description     string    `json:"description"`
+	MCC             int       `json:"mcc"`
+	Hold            bool      `json:"hold"`
+	Amount          int64     `json:"amount"`
+	OperationAmount int64     `json:"operationAmount"`
+	CurrencyCode    int       `json:"currencyCode"`
+	CommissionRate  int64     `json:"commissionRate"`
+	CashbackAmount  int64     `json:"cashbackAmount"`
+	Balance         int64     `json:"balance"`
 }
 
 func (c *ClientInfo) String() string {
