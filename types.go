@@ -9,6 +9,8 @@ import (
 	"github.com/rmg/iso4217"
 )
 
+type Time time.Time
+
 type ClientInfo struct {
 	Name     string    `json:"name"`
 	Accounts []Account `json:"accounts"`
@@ -24,17 +26,17 @@ type Account struct {
 
 // Statement - transaction
 type Statement struct {
-	ID              string    `json:"id"`
-	Time            time.Time `json:"time"`
-	Description     string    `json:"description"`
-	MCC             int       `json:"mcc"`
-	Hold            bool      `json:"hold"`
-	Amount          int64     `json:"amount"`
-	OperationAmount int64     `json:"operationAmount"`
-	CurrencyCode    int       `json:"currencyCode"`
-	CommissionRate  int64     `json:"commissionRate"`
-	CashbackAmount  int64     `json:"cashbackAmount"`
-	Balance         int64     `json:"balance"`
+	ID              string `json:"id"`
+	Time            Time   `json:"time"`
+	Description     string `json:"description"`
+	MCC             int    `json:"mcc"`
+	Hold            bool   `json:"hold"`
+	Amount          int64  `json:"amount"`
+	OperationAmount int64  `json:"operationAmount"`
+	CurrencyCode    int    `json:"currencyCode"`
+	CommissionRate  int64  `json:"commissionRate"`
+	CashbackAmount  int64  `json:"cashbackAmount"`
+	Balance         int64  `json:"balance"`
 }
 
 func (c *ClientInfo) String() string {
@@ -68,6 +70,17 @@ func (a *Account) String() string {
 		fmt.Sprintf("Власні кошти: %.2f %s\n", toBanknote(a.Balance-a.CreditLimit, rate), currency) +
 		fmt.Sprintf("Баланс: %.2f %s\n", toBanknote(a.Balance, rate), currency) +
 		fmt.Sprintf("Кредитний ліміт: %.2f %s\n", toBanknote(a.CreditLimit, rate), currency)
+}
+
+func (t *Time) UnmarshalJSON(data []byte) error {
+	ts, err := strconv.ParseInt(string(data), 10, 64)
+	if err != nil {
+		return err
+	}
+
+	*t = Time(time.Unix(ts, 0))
+
+	return nil
 }
 
 func toBanknote(i int64, rate float64) float64 {
