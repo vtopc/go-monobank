@@ -6,9 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/require"
-
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 var testAccount = Account{
@@ -101,6 +100,43 @@ func TestStatementUnmarshal(t *testing.T) {
 			var got Statement
 			err := json.Unmarshal([]byte(tt.v), &got)
 			require.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_toBanknote(t *testing.T) {
+	type args struct {
+	}
+	tests := []struct {
+		name       string
+		i          int64
+		minorUnits int
+		want       string
+	}{
+		{
+			name:       "positive",
+			i:          123,
+			minorUnits: 2,
+			want:       "1.23",
+		},
+		{
+			name:       "less_then_one_banknote-indent",
+			i:          34,
+			minorUnits: 2,
+			want:       "0.34",
+		},
+		{
+			name:       "indent-2",
+			i:          4,
+			minorUnits: 2,
+			want:       "0.04",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := toBanknote(tt.i, tt.minorUnits)
 			assert.Equal(t, tt.want, got)
 		})
 	}

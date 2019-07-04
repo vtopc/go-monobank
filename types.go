@@ -2,7 +2,6 @@ package monobank
 
 import (
 	"fmt"
-	"math"
 	"strconv"
 	"time"
 
@@ -53,23 +52,20 @@ func (c *ClientInfo) String() string {
 }
 
 func (a *Account) String() string {
-	var currency string
-	var minorUnits int
-
-	currency, minorUnits = iso4217.ByCode(a.CurrencyCode)
+	currency, minorUnits := iso4217.ByCode(a.CurrencyCode)
 	if len(currency) == 0 {
+		// setting defaults:
 		currency = strconv.Itoa(a.CurrencyCode)
 		minorUnits = 2
 	}
 
-	rate := math.Pow(10, float64(minorUnits))
-
 	return "Account: " + a.ID + "\n" +
 		"Валюта: " + currency + "\n" +
 		// "Кешбек: " + a.CashbackType + "\n" +
-		fmt.Sprintf("Власні кошти: %.2f %s\n", toBanknote(a.Balance-a.CreditLimit, rate), currency) +
-		fmt.Sprintf("Баланс: %.2f %s\n", toBanknote(a.Balance, rate), currency) +
-		fmt.Sprintf("Кредитний ліміт: %.2f %s\n", toBanknote(a.CreditLimit, rate), currency)
+		// TODO: rewrite to string concat:
+		fmt.Sprintf("Власні кошти: %s %s\n", toBanknote(a.Balance-a.CreditLimit, minorUnits), currency) +
+		fmt.Sprintf("Баланс: %s %s\n", toBanknote(a.Balance, minorUnits), currency) +
+		fmt.Sprintf("Кредитний ліміт: %s %s\n", toBanknote(a.CreditLimit, minorUnits), currency)
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
@@ -83,6 +79,18 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func toBanknote(i int64, rate float64) float64 {
-	return float64(i) / rate
+// toBanknote `minorUnits` - symbols after dot.
+// TODO: write benchmarks for toBanknote() and next:
+//
+//     rate := math.Pow(10, float64(minorUnits))
+//     return float64(i) / rate
+func toBanknote(i int64, minorUnits int) string {
+	s := strconv.FormatInt(i, 10)
+
+	// indent:
+	for len(s) <= minorUnits {
+		s = "0" + s
+	}
+
+	return s[:len(s)-minorUnits] + "." + s[len(s)-minorUnits:]
 }
