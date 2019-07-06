@@ -11,9 +11,13 @@ import (
 	"github.com/pkg/errors"
 )
 
-type Iface interface {
+type PublicIface interface {
 	// Currency https://api.monobank.ua/docs/#/definitions/CurrencyInfo
 	Currency() ([]byte, error)
+}
+
+type Iface interface {
+	PublicIface
 
 	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
 	ClientInfo() (*ClientInfo, error)
