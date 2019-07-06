@@ -20,4 +20,7 @@ https://api.monobank.ua/docs/
 ## TODO
 - Corporate Authorization
 - Corporate API(init/check auth)
+- More unit tests
+- Linter
 - Webhooks
+- CI for tests
