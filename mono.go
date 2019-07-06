@@ -99,6 +99,7 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 	return nil, errors.Wrapf(err, "body: %s", string(body))
 }
 
+// TODO: make `to` optional
 func (c Client) Statement(accountID string, from, to time.Time) (Statements, error) {
 	const urlPrefix = baseURL + "/personal/statement"
 	uri := fmt.Sprintf("%s/%s/%d/%d", urlPrefix, accountID, from.Unix(), to.Unix())
