@@ -10,25 +10,26 @@ import (
 
 type Time time.Time
 
+// ClientInfo - client/user info
 type ClientInfo struct {
 	Name     string    `json:"name"`
 	Accounts []Account `json:"accounts"`
 }
 
 type Account struct {
-	ID           string `json:"id"` // {account}
-	CurrencyCode int    `json:"currencyCode"`
-	CashbackType string `json:"cashbackType"`
+	ID           string `json:"id"` // account ID
 	Balance      int64  `json:"balance"`
 	CreditLimit  int64  `json:"creditLimit"`
+	CurrencyCode int    `json:"currencyCode"`
+	CashbackType string `json:"cashbackType"` // enum: None, UAH, Miles
 }
 
-// Statement - transaction
+// Statement - bank account statement
 type Statement struct {
 	ID              string `json:"id"`
 	Time            Time   `json:"time"`
 	Description     string `json:"description"`
-	MCC             int    `json:"mcc"`
+	MCC             int32  `json:"mcc"`
 	Hold            bool   `json:"hold"`
 	Amount          int64  `json:"amount"`
 	OperationAmount int64  `json:"operationAmount"`
@@ -37,6 +38,9 @@ type Statement struct {
 	CashbackAmount  int64  `json:"cashbackAmount"`
 	Balance         int64  `json:"balance"`
 }
+
+// Statements - transactions
+type Statements []Statement
 
 func (c *ClientInfo) String() string {
 	if c == nil {
