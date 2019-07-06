@@ -37,4 +37,9 @@ func NewNoopAuthorizer() NoopAuthorizer {
 	return NoopAuthorizer{}
 }
 
-// TODO: add CorporateAuthorizer https://api.monobank.ua/docs/corporate.html
+// TODO: add NewCorporateAuthorizer https://api.monobank.ua/docs/corporate.html
+// type CorporateAuthorizer struct {
+// 	keyID     string // X-Key-Id
+// 	requestID string // X-Request-Id
+// 	sign      string // X-Sign (X-time | X-Request-Id | URL)
+// }
