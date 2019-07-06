@@ -63,7 +63,7 @@ func (a *Account) String() string {
 		minorUnits = 2
 	}
 
-	return "Account: " + a.ID + "\n" +
+	return "Account: /ST_" + a.ID + "\n" +
 		"Валюта: " + currency + "\n" +
 		// "Кешбек: " + a.CashbackType + "\n" +
 		// TODO: rewrite to string concat:
