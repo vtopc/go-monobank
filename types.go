@@ -63,9 +63,9 @@ func (a *Account) String() string {
 		"Валюта: " + currency + "\n" +
 		// "Кешбек: " + a.CashbackType + "\n" +
 		// TODO: rewrite to string concat:
-		fmt.Sprintf("Власні кошти: %s %s\n", toBanknote(a.Balance-a.CreditLimit, minorUnits), currency) +
-		fmt.Sprintf("Баланс: %s %s\n", toBanknote(a.Balance, minorUnits), currency) +
-		fmt.Sprintf("Кредитний ліміт: %s %s\n", toBanknote(a.CreditLimit, minorUnits), currency)
+		fmt.Sprintf("Власні кошти: %s %s\n", ToBanknote(a.Balance-a.CreditLimit, minorUnits), currency) +
+		fmt.Sprintf("Баланс: %s %s\n", ToBanknote(a.Balance, minorUnits), currency) +
+		fmt.Sprintf("Кредитний ліміт: %s %s\n", ToBanknote(a.CreditLimit, minorUnits), currency)
 }
 
 func (t *Time) UnmarshalJSON(data []byte) error {
@@ -77,20 +77,4 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 	*t = Time(time.Unix(ts, 0))
 
 	return nil
-}
-
-// toBanknote `minorUnits` - symbols after dot.
-// TODO: write benchmarks for toBanknote() and next:
-//
-//     rate := math.Pow(10, float64(minorUnits))
-//     return float64(i) / rate
-func toBanknote(i int64, minorUnits int) string {
-	s := strconv.FormatInt(i, 10)
-
-	// indent:
-	for len(s) <= minorUnits {
-		s = "0" + s
-	}
-
-	return s[:len(s)-minorUnits] + "." + s[len(s)-minorUnits:]
 }
