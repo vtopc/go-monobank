@@ -31,6 +31,7 @@ type Iface interface {
 // TODO: move to test?
 var _ Iface = Client{}
 
+// TODO: return Currency struct:
 func (c Client) Currency() ([]byte, error) {
 	const uri = baseURL + "/bank/currency"
 
