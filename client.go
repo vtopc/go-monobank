@@ -17,20 +17,22 @@ type Client struct {
 }
 
 // New - returns new monobank Client
-// TODO: replace auth with opts?
-func New(client *http.Client, auth Authorizer) Client {
-	c := Client{c: client, auth: auth}
-
-	if c.auth == nil {
-		c.auth = NewNoopAuthorizer()
-	}
+func New(client *http.Client) Client {
+	c := Client{c: client, auth: NewNoopAuthorizer()}
 
 	if c.c == nil {
+		// defaults
 		c.c = &http.Client{
 			Timeout: 30 * time.Second,
 		}
 	}
 
+	return c
+}
+
+// WithAuth returns copy of Client with authorizer
+func (c Client) WithAuth(auth Authorizer) Client {
+	c.auth = auth
 	return c
 }
 
