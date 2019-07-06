@@ -1,5 +1,6 @@
 # go-monobank
-Monobank REST API client
+Monobank REST API client.
+Currently supported only personal authorization(with Token).
 
 ## Usage
 ```go
@@ -15,3 +16,8 @@ func main(){
 
 ## Official docs
 https://api.monobank.ua/docs/
+
+## TODO
+- Corporate Authorization
+- Corporate API(init/check auth)
+- Webhooks
