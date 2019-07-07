@@ -40,9 +40,9 @@ type Statement struct {
 type Statements []Statement
 
 type Currency struct {
-	CurrencyCodeA int32   `json:"currencyCodeA"`
-	CurrencyCodeB int32   `json:"currencyCodeB"`
-	Date          int32   `json:"date"`
+	CurrencyCodeA int     `json:"currencyCodeA"`
+	CurrencyCodeB int     `json:"currencyCodeB"`
+	Date          Time    `json:"date"`
 	RateSell      float64 `json:"rateSell"`
 	RateBuy       float64 `json:"rateBuy"`
 	RateCross     float64 `json:"rateCross"`
