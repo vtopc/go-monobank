@@ -1,7 +1,6 @@
 package monobank
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -13,7 +12,7 @@ import (
 
 type PublicIface interface {
 	// Currency https://api.monobank.ua/docs/#/definitions/CurrencyInfo
-	Currency() ([]byte, error)
+	Currency() (Currencies, error)
 }
 
 type Iface interface {
@@ -31,33 +30,17 @@ type Iface interface {
 // TODO: move to test?
 var _ Iface = Client{}
 
-func (c Client) Currency() ([]byte, error) {
-	const uri = baseURL + "/bank/currency"
+func (c Client) Currency() (Currencies, error) {
+	const urlPrefix = baseURL + "/bank/currency"
 
-	resp, err := c.c.Get(uri)
+	req, err := http.NewRequest(http.MethodGet, urlPrefix, nil)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to GET: %s", uri)
+		return nil, errors.Wrap(err, "failed to create request")
 	}
 
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read response body; status(%d)", resp.StatusCode)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, errors.Errorf("unexpected status(%d), body(%s)", resp.StatusCode, string(body))
-	}
-
-	var prettyJSON bytes.Buffer
-	err = json.Indent(&prettyJSON, body, "", "\t")
-	if err != nil {
-		// defaulting to ugly JSON
-		return body, nil
-	}
-
-	return prettyJSON.Bytes(), nil
+	var v Currencies
+	err = c.Do(req, http.StatusOK, &v)
+	return v, err
 }
 
 func (c Client) ClientInfo() (*ClientInfo, error) {
