@@ -70,33 +70,9 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 
 	c.auth.SetAuth(req)
 
-	resp, err := c.c.Do(req)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to GET: %s", urlPrefix)
-	}
-
-	defer resp.Body.Close()
-
-	switch resp.StatusCode {
-	case http.StatusOK:
-		var v ClientInfo
-		err = json.NewDecoder(resp.Body).Decode(&v)
-		if err == nil {
-			return &v, nil
-		}
-
-		err = errors.Wrap(err, "failed to unmarshal")
-
-	default:
-		err = errors.Errorf("unexpected status(%d)", resp.StatusCode)
-	}
-
-	body, bodyErr := ioutil.ReadAll(resp.Body)
-	if bodyErr != nil {
-		return nil, errors.Wrapf(err, "failed to read response body: %s", bodyErr)
-	}
-
-	return nil, errors.Wrapf(err, "body: %s", string(body))
+	var v ClientInfo
+	err = c.Do(req, http.StatusOK, &v)
+	return &v, err
 }
 
 // TODO: make `to` optional
