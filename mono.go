@@ -31,7 +31,6 @@ type Iface interface {
 // TODO: move to test?
 var _ Iface = Client{}
 
-// TODO: return Currency struct:
 func (c Client) Currency() ([]byte, error) {
 	const uri = baseURL + "/bank/currency"
 
@@ -112,19 +111,31 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 
 	c.auth.SetAuth(req)
 
+	var v Statements
+	err = c.Do(req, http.StatusOK, &v)
+	return v, err
+}
+
+func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
+	// TODO: check that `v` is a pointer
+
 	resp, err := c.c.Do(req)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to GET: %s", uri)
+		return errors.Wrapf(err, "failed to %s %s", req.Method, req.URL)
 	}
 
 	defer resp.Body.Close()
 
 	switch resp.StatusCode {
-	case http.StatusOK:
-		var v Statements
+	case statusCode:
+		if v == nil {
+			// nothing to unmarshal
+			return nil
+		}
+
 		err = json.NewDecoder(resp.Body).Decode(&v)
 		if err == nil {
-			return v, nil
+			return nil
 		}
 
 		err = errors.Wrap(err, "failed to unmarshal")
@@ -135,8 +146,8 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 
 	errorBody, e := ioutil.ReadAll(resp.Body)
 	if e != nil {
-		return nil, errors.Wrapf(err, "but failed to read response body: %s", e)
+		return errors.Wrapf(err, "but failed to read response body: %s", e)
 	}
 
-	return nil, errors.Wrapf(err, "errorBody: %s", string(errorBody))
+	return errors.Wrapf(err, "errorBody: %s", string(errorBody))
 }

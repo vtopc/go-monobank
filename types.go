@@ -39,6 +39,17 @@ type Statement struct {
 // Statements - transactions
 type Statements []Statement
 
+type Currency struct {
+	CurrencyCodeA int32   `json:"currencyCodeA"`
+	CurrencyCodeB int32   `json:"currencyCodeB"`
+	Date          int32   `json:"date"`
+	RateSell      float64 `json:"rateSell"`
+	RateBuy       float64 `json:"rateBuy"`
+	RateCross     float64 `json:"rateCross"`
+}
+
+type Currencies []Currency
+
 type Time time.Time
 
 func (t *Time) UnmarshalJSON(data []byte) error {
