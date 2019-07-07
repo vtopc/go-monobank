@@ -22,7 +22,7 @@ func TestStatementUnmarshal(t *testing.T) {
 		{
 			v: fmt.Sprintf(`{"time": %d}`, ts),
 			want: Statement{
-				Time: Time(time.Unix(ts, 0)),
+				Time: Time{time.Unix(ts, 0)},
 			},
 		},
 	}

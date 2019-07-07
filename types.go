@@ -50,7 +50,9 @@ type Currency struct {
 
 type Currencies []Currency
 
-type Time time.Time
+type Time struct {
+	time.Time // embeding with inheritance
+}
 
 func (t *Time) UnmarshalJSON(data []byte) error {
 	ts, err := strconv.ParseInt(string(data), 10, 64)
@@ -58,7 +60,7 @@ func (t *Time) UnmarshalJSON(data []byte) error {
 		return err
 	}
 
-	*t = Time(time.Unix(ts, 0))
+	t.Time = time.Unix(ts, 0)
 
 	return nil
 }
