@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/pkg/errors"
@@ -31,9 +32,9 @@ type Iface interface {
 var _ Iface = Client{}
 
 func (c Client) Currency() (Currencies, error) {
-	const urlPrefix = baseURL + "/bank/currency"
+	const urlSuffix = "/bank/currency"
 
-	req, err := http.NewRequest(http.MethodGet, urlPrefix, nil)
+	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -44,9 +45,9 @@ func (c Client) Currency() (Currencies, error) {
 }
 
 func (c Client) ClientInfo() (*ClientInfo, error) {
-	const urlPrefix = baseURL + "/personal/client-info"
+	const urlSuffix = "/personal/client-info"
 
-	req, err := http.NewRequest(http.MethodGet, urlPrefix, nil)
+	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -60,8 +61,8 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 
 // TODO: make `to` optional
 func (c Client) Statement(accountID string, from, to time.Time) (Statements, error) {
-	const urlPrefix = baseURL + "/personal/statement"
-	uri := fmt.Sprintf("%s/%s/%d/%d", urlPrefix, accountID, from.Unix(), to.Unix())
+	const urlSuffix = "/personal/statement"
+	uri := fmt.Sprintf("%s/%s/%d/%d", urlSuffix, accountID, from.Unix(), to.Unix())
 
 	req, err := http.NewRequest(http.MethodGet, uri, nil)
 	if err != nil {
@@ -77,6 +78,12 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 
 func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
 	// TODO: check that `v` is a pointer
+
+	var err error
+	req.URL, err = url.Parse(baseURL + req.URL.String())
+	if err != nil {
+		return errors.Wrap(err, "failed to parse URL")
+	}
 
 	resp, err := c.c.Do(req)
 	if err != nil {
