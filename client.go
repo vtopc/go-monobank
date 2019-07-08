@@ -44,8 +44,10 @@ func (c Client) WithAuth(auth Authorizer) Client {
 // TODO: add Client.NewRequest with user agent
 //  req.Header.Set("User-Agent", userAgent)
 
+// Do does request.
+// `statusCode` - expected HTTP status code from response.
 func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
-	// TODO: check that `v` is a pointer
+	// TODO: check that `v` is a pointer or nil
 
 	var err error
 	req.URL, err = url.Parse(baseURL + req.URL.String())
