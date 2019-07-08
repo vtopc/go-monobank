@@ -50,7 +50,7 @@ func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
 	var err error
 	req.URL, err = url.Parse(baseURL + req.URL.String())
 	if err != nil {
-		return errors.Wrap(err, "failed to parse URL")
+		return errors.Wrap(err, "failed to build URL")
 	}
 
 	resp, err := c.c.Do(req)
