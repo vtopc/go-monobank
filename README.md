@@ -15,7 +15,11 @@ func main(){
 ```
 
 ## Official docs
-https://api.monobank.ua/docs/
+ - https://api.monobank.ua/docs/
+
+## Similar projects
+- https://github.com/shal/mono
+- https://github.com/artemrys/go-monobank-api
 
 ## TODO
 - Corporate Authorization
