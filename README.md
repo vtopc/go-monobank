@@ -26,5 +26,4 @@ func main(){
 - Corporate API(init/check auth)
 - More unit tests
 - Linter
-- Webhooks
 - CI for tests
