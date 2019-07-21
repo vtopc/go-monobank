@@ -17,13 +17,18 @@ const (
 )
 
 type Client struct {
-	c    *http.Client
-	auth Authorizer
+	c       *http.Client
+	auth    Authorizer
+	baseURL string
 }
 
 // New - returns new monobank Client
 func New(client *http.Client) Client {
-	c := Client{c: client, auth: NewPublicAuthorizer()}
+	c := Client{
+		c:       client,
+		auth:    NewPublicAuthorizer(),
+		baseURL: baseURL,
+	}
 
 	if c.c == nil {
 		// defaults
@@ -41,13 +46,19 @@ func (c Client) WithAuth(auth Authorizer) Client {
 	return c
 }
 
+// WithAuth returns copy of Client with overridden baseURL
+func (c Client) WithBaseURL(uri string) Client {
+	c.baseURL = uri
+	return c
+}
+
 // Do does request.
 // `statusCode` - expected HTTP status code from response.
 func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
 	// TODO: check that `v` is a pointer or nil
 
 	var err error
-	req.URL, err = url.Parse(baseURL + req.URL.String())
+	req.URL, err = url.Parse(c.baseURL + req.URL.String())
 	if err != nil {
 		return errors.Wrap(err, "failed to build URL")
 	}
