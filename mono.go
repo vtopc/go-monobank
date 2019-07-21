@@ -49,8 +49,6 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
 
-	c.auth.SetAuth(req)
-
 	var v ClientInfo
 	err = c.Do(req, http.StatusOK, &v)
 	return &v, err
@@ -65,8 +63,6 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
-
-	c.auth.SetAuth(req)
 
 	var v Statements
 	err = c.Do(req, http.StatusOK, &v)

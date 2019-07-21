@@ -55,6 +55,8 @@ func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
 		return errors.Wrap(err, "failed to build URL")
 	}
 
+	c.auth.SetAuth(req)
+
 	resp, err := c.c.Do(req)
 	if err != nil {
 		return errors.Wrapf(err, "failed to %s %s", req.Method, req.URL)
