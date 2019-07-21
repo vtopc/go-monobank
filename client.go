@@ -53,8 +53,8 @@ func (c Client) WithBaseURL(uri string) Client {
 }
 
 // Do does request.
-// `statusCode` - expected HTTP status code from response.
-func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
+// Stores JSON response in the value pointed to by v.
+func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) error {
 	// TODO: check that `v` is a pointer or nil
 
 	var err error
@@ -73,7 +73,7 @@ func (c Client) Do(req *http.Request, statusCode int, v interface{}) error {
 	defer resp.Body.Close()
 
 	switch resp.StatusCode {
-	case statusCode:
+	case expectedStatusCode:
 		if v == nil {
 			// nothing to unmarshal
 			return nil
