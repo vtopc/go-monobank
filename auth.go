@@ -29,12 +29,12 @@ func NewPersonalAuthorizer(token string) PersonalAuthorizer {
 	return PersonalAuthorizer{token}
 }
 
-type NoopAuthorizer struct{}
+type PublicAuthorizer struct{}
 
-func (a NoopAuthorizer) SetAuth(req *http.Request) {}
+func (a PublicAuthorizer) SetAuth(req *http.Request) {}
 
-func NewNoopAuthorizer() NoopAuthorizer {
-	return NoopAuthorizer{}
+func NewPublicAuthorizer() PublicAuthorizer {
+	return PublicAuthorizer{}
 }
 
 // TODO: add NewCorporateAuthorizer https://api.monobank.ua/docs/corporate.html

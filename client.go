@@ -23,7 +23,7 @@ type Client struct {
 
 // New - returns new monobank Client
 func New(client *http.Client) Client {
-	c := Client{c: client, auth: NewNoopAuthorizer()}
+	c := Client{c: client, auth: NewPublicAuthorizer()}
 
 	if c.c == nil {
 		// defaults
