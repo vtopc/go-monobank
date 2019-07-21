@@ -1,6 +1,8 @@
 package monobank
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -22,6 +24,9 @@ type Iface interface {
 	// Statement - bank account statement(transations)
 	// https://api.monobank.ua/docs/#/definitions/StatementItems
 	Statement(accountID string, from, to time.Time) (Statements, error)
+
+	// SetWebHook - sets webhook for statements
+	SetWebHook(uri string) error
 }
 
 // checks that Client satisfies interface
@@ -67,4 +72,21 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 	var v Statements
 	err = c.Do(req, http.StatusOK, &v)
 	return v, err
+}
+
+func (c Client) SetWebHook(uri string) error {
+	const urlSuffix = "/personal/webhook"
+
+	var buf *bytes.Buffer
+	err := json.NewEncoder(buf).Encode(webHook{WebHookURL: uri})
+	if err != nil {
+		return errors.Wrap(err, "failed to marshal")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, urlSuffix, buf)
+	if err != nil {
+		return errors.Wrap(err, "failed to create request")
+	}
+
+	return c.Do(req, http.StatusOK, nil)
 }

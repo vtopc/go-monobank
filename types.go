@@ -50,6 +50,10 @@ type Currency struct {
 
 type Currencies []Currency
 
+type webHook struct {
+	WebHookURL string `json:"webHookUrl"`
+}
+
 type Time struct {
 	time.Time // embeding with inheritance
 }
