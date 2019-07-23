@@ -34,6 +34,7 @@ type Statement struct {
 	CommissionRate  int64  `json:"commissionRate"`
 	CashbackAmount  int64  `json:"cashbackAmount"`
 	Balance         int64  `json:"balance"`
+	Comment         string `json:"comment"`
 }
 
 // Statements - transactions
