@@ -77,13 +77,13 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 func (c Client) SetWebHook(uri string) error {
 	const urlSuffix = "/personal/webhook"
 
-	var buf *bytes.Buffer
-	err := json.NewEncoder(buf).Encode(webHook{WebHookURL: uri})
+	var buf bytes.Buffer
+	err := json.NewEncoder(&buf).Encode(webHook{WebHookURL: uri})
 	if err != nil {
 		return errors.Wrap(err, "failed to marshal")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, urlSuffix, buf)
+	req, err := http.NewRequest(http.MethodPost, urlSuffix, &buf)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
