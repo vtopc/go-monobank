@@ -65,6 +65,10 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 
 	c.auth.SetAuth(req)
 
+	if req.Body != nil {
+		req.Header.Set("Content-Type", "application/json")
+	}
+
 	resp, err := c.c.Do(req)
 	if err != nil {
 		return errors.Wrapf(err, "failed to %s %s", req.Method, req.URL)
