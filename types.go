@@ -51,7 +51,7 @@ type Currency struct {
 
 type Currencies []Currency
 
-type webHook struct {
+type WebHookRequest struct {
 	WebHookURL string `json:"webHookUrl"`
 }
 

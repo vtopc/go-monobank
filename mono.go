@@ -78,7 +78,7 @@ func (c Client) SetWebHook(uri string) error {
 	const urlSuffix = "/personal/webhook"
 
 	var buf bytes.Buffer
-	err := json.NewEncoder(&buf).Encode(webHook{WebHookURL: uri})
+	err := json.NewEncoder(&buf).Encode(WebHookRequest{WebHookURL: uri})
 	if err != nil {
 		return errors.Wrap(err, "failed to marshal")
 	}
