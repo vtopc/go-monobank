@@ -12,7 +12,7 @@ type ClientInfo struct {
 }
 
 type Account struct {
-	ID           string `json:"id"` // account ID
+	AccountID    string `json:"id"`
 	Balance      int64  `json:"balance"`
 	CreditLimit  int64  `json:"creditLimit"`
 	CurrencyCode int    `json:"currencyCode"`
