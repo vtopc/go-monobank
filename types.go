@@ -55,6 +55,16 @@ type WebHookRequest struct {
 	WebHookURL string `json:"webHookUrl"`
 }
 
+type WebHookResponse struct {
+	Type string      `json:"type"` // "StatementItem"
+	Data WebHookData `json:"data"`
+}
+
+type WebHookData struct {
+	AccountID string    `json:"account"`
+	Statement Statement `json:"statementItem"`
+}
+
 type Time struct {
 	time.Time // embeding with inheritance
 }
