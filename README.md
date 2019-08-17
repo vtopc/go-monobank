@@ -1,4 +1,7 @@
 # go-monobank
+
+[![Godoc Reference][godoc-img]][godoc]
+
 Monobank REST API client.
 Currently supported only personal authorization(with Token).
 
@@ -27,3 +30,6 @@ func main(){
 - More unit tests
 - Linter
 - CI for tests
+
+[godoc]: https://godoc.org/github.com/vtopc/go-monobank
+[godoc-img]: https://godoc.org/github.com/vtopc/go-monobank?status.svg
