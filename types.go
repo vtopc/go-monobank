@@ -61,7 +61,8 @@ type WebHookResponse struct {
 }
 
 type WebHookData struct {
-	AccountID string      `json:"account"`
+	AccountID string `json:"account"`
+	// TODO: rename to Transaction:
 	Statement Transaction `json:"statementItem"`
 }
 
