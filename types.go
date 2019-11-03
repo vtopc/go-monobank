@@ -21,8 +21,8 @@ type Account struct {
 
 type Accounts []Account
 
-// Statement - bank account statement
-type Statement struct {
+// Transaction - bank account statement
+type Transaction struct {
 	ID              string `json:"id"`
 	Time            Time   `json:"time"`
 	Description     string `json:"description"`
@@ -37,8 +37,8 @@ type Statement struct {
 	Comment         string `json:"comment"`
 }
 
-// Statements - transactions
-type Statements []Statement
+// Transactions - transactions
+type Transactions []Transaction
 
 type Currency struct {
 	CurrencyCodeA int     `json:"currencyCodeA"`
@@ -61,8 +61,8 @@ type WebHookResponse struct {
 }
 
 type WebHookData struct {
-	AccountID string    `json:"account"`
-	Statement Statement `json:"statementItem"`
+	AccountID string      `json:"account"`
+	Statement Transaction `json:"statementItem"`
 }
 
 type Time struct {

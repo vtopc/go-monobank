@@ -10,20 +10,20 @@ import (
 	"github.com/pkg/errors"
 )
 
-type PublicIface interface {
+type PublicAPI interface {
 	// Currency https://api.monobank.ua/docs/#/definitions/CurrencyInfo
 	Currency() (Currencies, error)
 }
 
-type Iface interface {
-	PublicIface
+type PersonalAPI interface {
+	PublicAPI
 
 	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
 	ClientInfo() (*ClientInfo, error)
 
-	// Statement - bank account statement(transations)
+	// Transactions - gets bank account statements(transations)
 	// https://api.monobank.ua/docs/#/definitions/StatementItems
-	Statement(accountID string, from, to time.Time) (Statements, error)
+	Transactions(accountID string, from, to time.Time) (Transactions, error)
 
 	// SetWebHook - sets webhook for statements
 	SetWebHook(uri string) error
@@ -31,7 +31,7 @@ type Iface interface {
 
 // checks that Client satisfies interface
 // TODO: move to test?
-var _ Iface = Client{}
+var _ PersonalAPI = Client{}
 
 func (c Client) Currency() (Currencies, error) {
 	const urlSuffix = "/bank/currency"
@@ -60,7 +60,7 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 }
 
 // TODO: make `to` optional
-func (c Client) Statement(accountID string, from, to time.Time) (Statements, error) {
+func (c Client) Transactions(accountID string, from, to time.Time) (Transactions, error) {
 	const urlSuffix = "/personal/statement"
 	uri := fmt.Sprintf("%s/%s/%d/%d", urlSuffix, accountID, from.Unix(), to.Unix())
 
@@ -69,7 +69,7 @@ func (c Client) Statement(accountID string, from, to time.Time) (Statements, err
 		return nil, errors.Wrap(err, "failed to create request")
 	}
 
-	var v Statements
+	var v Transactions
 	err = c.Do(req, http.StatusOK, &v)
 	return v, err
 }

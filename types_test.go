@@ -16,12 +16,12 @@ func TestStatementUnmarshal(t *testing.T) {
 	tests := []struct {
 		name    string
 		v       string
-		want    Statement
+		want    Transaction
 		wantErr error
 	}{
 		{
 			v: fmt.Sprintf(`{"time": %d}`, ts),
-			want: Statement{
+			want: Transaction{
 				Time: Time{time.Unix(ts, 0)},
 			},
 		},
@@ -29,7 +29,7 @@ func TestStatementUnmarshal(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var got Statement
+			var got Transaction
 			err := json.Unmarshal([]byte(tt.v), &got)
 			require.NoError(t, err)
 			assert.Equal(t, tt.want, got)
