@@ -24,20 +24,18 @@ type Client struct {
 
 // New - returns new monobank Client
 func New(client *http.Client) Client {
-	c := Client{
-		c:       client,
-		auth:    NewPublicAuthorizer(),
-		baseURL: baseURL,
-	}
-
-	if c.c == nil {
+	if client == nil {
 		// defaults
-		c.c = &http.Client{
+		client = &http.Client{
 			Timeout: 30 * time.Second,
 		}
 	}
 
-	return c
+	return Client{
+		c:       client,
+		auth:    NewPublicAuthorizer(),
+		baseURL: baseURL,
+	}
 }
 
 // WithAuth returns copy of Client with authorizer
@@ -63,7 +61,9 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 		return errors.Wrap(err, "failed to build URL")
 	}
 
-	c.auth.SetAuth(req)
+	if c.auth != nil {
+		c.auth.SetAuth(req)
+	}
 
 	if req.Body != nil {
 		req.Header.Set("Content-Type", "application/json")
