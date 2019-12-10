@@ -23,7 +23,7 @@ func TestClient_Do(t *testing.T) {
 			method:             http.MethodGet,
 			urlPostfix:         "/test",
 			expectedStatusCode: http.StatusOK,
-			body:               []byte(`{"description":"test"`),
+			body:               []byte(`{"description":"test"}`),
 			v:                  Transaction{},
 			want:               Transaction{Description: "test"},
 		},
@@ -33,7 +33,7 @@ func TestClient_Do(t *testing.T) {
 		t.Run(k, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, tc.method, r.Method)
-				hasSuffix(t, r.URL.String(), tc.urlPostfix) // server.URL+tc.urlPostfix
+				hasSuffix(t, r.URL.String(), tc.urlPostfix)
 
 				// Send response to be tested
 				w.WriteHeader(tc.expectedStatusCode)
