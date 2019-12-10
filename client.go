@@ -52,14 +52,22 @@ func (c Client) WithBaseURL(uri string) Client {
 
 // Do does request.
 // Stores JSON response in the value pointed to by v.
+// TODO: make expectedStatusCode a slice:
 func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) error {
 	// TODO: check that `v` is a pointer or nil
+
+	if req == nil {
+		return errors.New("empty request")
+	}
 
 	var err error
 	req.URL, err = url.Parse(c.baseURL + req.URL.String())
 	if err != nil {
 		return errors.Wrap(err, "failed to build URL")
 	}
+
+	// TODO: add context:
+	//  req = req.WithContext(ctx)
 
 	if c.auth != nil {
 		c.auth.SetAuth(req)
@@ -76,6 +84,14 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 
 	defer resp.Body.Close()
 
+	var body []byte
+	if v != nil {
+		body, err = ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return errors.Wrap(err, "couldn't read the body")
+		}
+	}
+
 	switch resp.StatusCode {
 	case expectedStatusCode:
 		if v == nil {
@@ -83,7 +99,7 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 			return nil
 		}
 
-		err = json.NewDecoder(resp.Body).Decode(&v)
+		err = json.Unmarshal(body, v)
 		if err == nil {
 			return nil
 		}
@@ -91,13 +107,8 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 		err = errors.Wrap(err, "failed to unmarshal")
 
 	default:
-		err = errors.Errorf("unexpected status(%d)", resp.StatusCode)
+		err = errors.Errorf("unexpected status: %d", resp.StatusCode)
 	}
 
-	errorBody, e := ioutil.ReadAll(resp.Body)
-	if e != nil {
-		return errors.Wrapf(err, "but failed to read response body: %s", e)
-	}
-
-	return errors.Wrapf(err, "errorBody: %s", string(errorBody))
+	return errors.Wrapf(err, "errorBody: %s", string(body))
 }
