@@ -2,6 +2,7 @@ package monobank
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -12,28 +13,28 @@ import (
 
 type PublicAPI interface {
 	// Currency https://api.monobank.ua/docs/#/definitions/CurrencyInfo
-	Currency() (Currencies, error)
+	Currency(context.Context) (Currencies, error)
 }
 
 type PersonalAPI interface {
 	PublicAPI
 
 	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
-	ClientInfo() (*ClientInfo, error)
+	ClientInfo(context.Context) (*ClientInfo, error)
 
 	// Transactions - gets bank account statements(transations)
 	// https://api.monobank.ua/docs/#/definitions/StatementItems
-	Transactions(accountID string, from, to time.Time) (Transactions, error)
+	Transactions(ctx context.Context, accountID string, from, to time.Time) (Transactions, error)
 
 	// SetWebHook - sets webhook for statements
-	SetWebHook(uri string) error
+	SetWebHook(ctx context.Context, uri string) error
 }
 
 // checks that Client satisfies interface
 // TODO: move to test?
 var _ PersonalAPI = Client{}
 
-func (c Client) Currency() (Currencies, error) {
+func (c Client) Currency(ctx context.Context) (Currencies, error) {
 	const urlSuffix = "/bank/currency"
 
 	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
@@ -42,11 +43,11 @@ func (c Client) Currency() (Currencies, error) {
 	}
 
 	var v Currencies
-	err = c.Do(req, http.StatusOK, &v)
+	err = c.do(ctx, req, &v, http.StatusOK)
 	return v, err
 }
 
-func (c Client) ClientInfo() (*ClientInfo, error) {
+func (c Client) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 	const urlSuffix = "/personal/client-info"
 
 	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
@@ -55,12 +56,14 @@ func (c Client) ClientInfo() (*ClientInfo, error) {
 	}
 
 	var v ClientInfo
-	err = c.Do(req, http.StatusOK, &v)
+	err = c.do(ctx, req, &v, http.StatusOK)
 	return &v, err
 }
 
 // TODO: make `to` optional
-func (c Client) Transactions(accountID string, from, to time.Time) (Transactions, error) {
+func (c Client) Transactions(ctx context.Context, accountID string, from, to time.Time) (
+	Transactions, error) {
+
 	const urlSuffix = "/personal/statement"
 	uri := fmt.Sprintf("%s/%s/%d/%d", urlSuffix, accountID, from.Unix(), to.Unix())
 
@@ -70,11 +73,11 @@ func (c Client) Transactions(accountID string, from, to time.Time) (Transactions
 	}
 
 	var v Transactions
-	err = c.Do(req, http.StatusOK, &v)
+	err = c.do(ctx, req, &v, http.StatusOK)
 	return v, err
 }
 
-func (c Client) SetWebHook(uri string) error {
+func (c Client) SetWebHook(ctx context.Context, uri string) error {
 	const urlSuffix = "/personal/webhook"
 
 	var buf bytes.Buffer
@@ -88,5 +91,5 @@ func (c Client) SetWebHook(uri string) error {
 		return errors.Wrap(err, "failed to create request")
 	}
 
-	return c.Do(req, http.StatusOK, nil)
+	return c.do(ctx, req, nil, http.StatusOK)
 }

@@ -3,6 +3,7 @@ package monobank
 // TODO: add HTTP retry
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -50,10 +51,10 @@ func (c Client) WithBaseURL(uri string) Client {
 	return c
 }
 
-// Do does request.
+// do does request.
 // Stores JSON response in the value pointed to by v.
 // TODO: make expectedStatusCode a slice:
-func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) error {
+func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expectedStatusCode int) error {
 	// TODO: check that `v` is a pointer or nil
 
 	if req == nil {
@@ -66,8 +67,7 @@ func (c Client) Do(req *http.Request, expectedStatusCode int, v interface{}) err
 		return errors.Wrap(err, "failed to build URL")
 	}
 
-	// TODO: add context:
-	//  req = req.WithContext(ctx)
+	req = req.WithContext(ctx)
 
 	if c.auth != nil {
 		c.auth.SetAuth(req)

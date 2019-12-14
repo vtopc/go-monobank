@@ -1,6 +1,7 @@
 package monobank
 
 import (
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -51,7 +52,7 @@ func TestClient_Do(t *testing.T) {
 			require.NoError(t, err)
 
 			// test:
-			err = c.Do(req, tc.expectedStatusCode, &tc.v)
+			err = c.do(context.Background(), req, &tc.v, tc.expectedStatusCode)
 			require.NoError(t, err)
 			assert.Equal(t, tc.want, tc.v)
 		})
