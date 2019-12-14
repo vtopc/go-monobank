@@ -30,10 +30,6 @@ type PersonalAPI interface {
 	SetWebHook(ctx context.Context, uri string) error
 }
 
-// checks that Client satisfies interface
-// TODO: move to test?
-var _ PersonalAPI = Client{}
-
 func (c Client) Currency(ctx context.Context) (Currencies, error) {
 	const urlSuffix = "/bank/currency"
 
