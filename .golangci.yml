@@ -1,23 +1,18 @@
 linters:
   enable:
-    - gosec
-    - goimports
-    - bodyclose
-    - stylecheck
+    - gas
+    - golint
+    - go-critic
     - interfacer
     - unconvert
-    - dupl
     - goconst
-    - gocognit
-    - maligned
-    - depguard
-    - unparam
-    - dogsled
+    - goimports
+    - bodyclose
+    - gochecknoglobals
     - prealloc
     - scopelint
-    - gocritic
-    - gochecknoglobals
-    - funlen
-    - whitespace
-    - wsl
-    - gomnd
+    - maligned
+    - dupl
+    - gocyclo
+    - unparam
+    - depguard
