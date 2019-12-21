@@ -28,7 +28,6 @@ func main(){
 - Corporate Authorization
 - Corporate API(init/check auth)
 - More unit tests
-- Linter
 - CI for tests
 
 [godoc]: https://godoc.org/github.com/vtopc/go-monobank
