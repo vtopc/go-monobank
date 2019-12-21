@@ -2,7 +2,6 @@ linters:
   enable:
     - gas
     - golint
-    - go-critic
     - interfacer
     - unconvert
     - goconst
@@ -16,3 +15,4 @@ linters:
     - gocyclo
     - unparam
     - depguard
+#   - go-critic
