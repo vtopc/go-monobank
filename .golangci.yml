@@ -1,0 +1,18 @@
+linters:
+  enable:
+    - gas
+    - golint
+    - interfacer
+    - unconvert
+    - goconst
+    - goimports
+    - bodyclose
+    - gochecknoglobals
+    - prealloc
+    - scopelint
+    - maligned
+    - dupl
+    - gocyclo
+    - unparam
+    - depguard
+#   - go-critic
