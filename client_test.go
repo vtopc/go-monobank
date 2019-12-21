@@ -31,6 +31,7 @@ func TestClient_Do(t *testing.T) {
 	}
 
 	for k, tc := range tests {
+		tc := tc
 		t.Run(k, func(t *testing.T) {
 			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				assert.Equal(t, tc.method, r.Method)
