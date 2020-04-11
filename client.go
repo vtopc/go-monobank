@@ -23,6 +23,8 @@ type Client struct {
 	baseURL string
 }
 
+// TODO: add WithOpts
+
 // New - returns new monobank Client
 func New(client *http.Client) Client {
 	if client == nil {
