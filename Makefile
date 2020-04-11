@@ -4,5 +4,5 @@ test:
 
 .PHONY: deps
 deps:
-	GO111MODULE=on go mod tidy
-	GO111MODULE=on go mod vendor
+	go mod tidy
+	go mod vendor

@@ -3,17 +3,24 @@
 [![Godoc Reference][godoc-img]][godoc]
 
 Monobank REST API client.
-Currently supported only personal authorization(with Token).
+Currently, supported only personal authorization(with Token).
 
 ## Usage
 ```go
+package main
+
 import (
+    "context"
+    "fmt"
+    "os"
+
     "github.com/vtopc/go-monobank"
 )
 
 func main(){
-    client := monobank.New(nil, monobank.NewPersonalAuthorizer(os.Getenv("TOKEN")))
-    response, err := client.ClientInfo()
+    client := monobank.New(nil).WithAuth(monobank.NewPersonalAuthorizer(os.Getenv("TOKEN")))
+    response, _ := client.ClientInfo(context.Background())
+    fmt.Println(response)
 }
 ```
 
