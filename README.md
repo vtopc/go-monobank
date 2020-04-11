@@ -3,7 +3,7 @@
 [![Godoc Reference][godoc-img]][godoc]
 
 Monobank REST API client.
-Currently supported only personal authorization(with Token).
+Currently, supported only personal authorization(with Token).
 
 ## Usage
 ```go
