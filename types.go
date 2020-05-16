@@ -10,11 +10,12 @@ type ClientInfo struct {
 }
 
 type Account struct {
-	AccountID    string `json:"id"`
-	Balance      int64  `json:"balance"`
-	CreditLimit  int64  `json:"creditLimit"`
-	CurrencyCode int    `json:"currencyCode"`
-	CashbackType string `json:"cashbackType"` // enum: None, UAH, Miles
+	AccountID    string   `json:"id"`
+	Balance      int64    `json:"balance"`
+	CreditLimit  int64    `json:"creditLimit"`
+	CurrencyCode int      `json:"currencyCode"`
+	CashbackType string   `json:"cashbackType"` // enum: None, UAH, Miles
+	CardMasks    []string `json:"maskedPan"`    // card number masks
 }
 
 type Accounts []Account
