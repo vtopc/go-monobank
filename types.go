@@ -4,8 +4,9 @@ import "github.com/vtopc/epoch"
 
 // ClientInfo - client/user info
 type ClientInfo struct {
-	Name     string   `json:"name"`
-	Accounts Accounts `json:"accounts"`
+	Name       string   `json:"name"`
+	WebHookURL string   `json:"webHookUrl"`
+	Accounts   Accounts `json:"accounts"`
 }
 
 type Account struct {
