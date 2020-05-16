@@ -4,16 +4,18 @@ import "github.com/vtopc/epoch"
 
 // ClientInfo - client/user info
 type ClientInfo struct {
-	Name     string   `json:"name"`
-	Accounts Accounts `json:"accounts"`
+	Name       string   `json:"name"`
+	WebHookURL string   `json:"webHookUrl"`
+	Accounts   Accounts `json:"accounts"`
 }
 
 type Account struct {
-	AccountID    string `json:"id"`
-	Balance      int64  `json:"balance"`
-	CreditLimit  int64  `json:"creditLimit"`
-	CurrencyCode int    `json:"currencyCode"`
-	CashbackType string `json:"cashbackType"` // enum: None, UAH, Miles
+	AccountID    string   `json:"id"`
+	Balance      int64    `json:"balance"`
+	CreditLimit  int64    `json:"creditLimit"`
+	CurrencyCode int      `json:"currencyCode"`
+	CashbackType string   `json:"cashbackType"` // enum: None, UAH, Miles
+	CardMasks    []string `json:"maskedPan"`    // card number masks
 }
 
 type Accounts []Account
@@ -58,7 +60,6 @@ type WebHookResponse struct {
 }
 
 type WebHookData struct {
-	AccountID string `json:"account"`
-	// TODO: rename to Transaction:
-	Statement Transaction `json:"statementItem"`
+	AccountID   string      `json:"account"`
+	Transaction Transaction `json:"statementItem"`
 }
