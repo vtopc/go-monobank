@@ -1,6 +1,6 @@
 # go-monobank
 
-[![Godoc Reference][godoc-img]][godoc-url] [![build][build-img]][build-url] [![codecov][codecov-img]][codecov-url]
+[![Godoc Reference][godoc-img]][godoc-url] [![CI][ci-img]][ci-url] [![codecov][codecov-img]][codecov-url]
 
 Monobank REST API client.
 Currently, supported only personal authorization(with Token).
@@ -39,8 +39,8 @@ func main(){
 [godoc-img]: https://godoc.org/github.com/vtopc/go-monobank?status.svg
 [godoc-url]: https://godoc.org/github.com/vtopc/go-monobank
 
-[build-img]: https://github.com/vtopc/go-monobank/workflows/build/badge.svg
-[build-url]: https://github.com/vtopc/go-monobank/actions?query=workflow%3A%22build%22
+[ci-img]: https://github.com/vtopc/go-monobank/workflows/ci/badge.svg
+[ci-url]: https://github.com/vtopc/go-monobank/actions?query=workflow%3A%22ci%22
 
 [codecov-img]: https://codecov.io/gh/vtopc/go-monobank/branch/master/graph/badge.svg
 [codecov-url]: https://codecov.io/gh/vtopc/go-monobank
