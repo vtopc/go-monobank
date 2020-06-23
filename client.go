@@ -14,7 +14,8 @@ import (
 )
 
 const (
-	baseURL = "https://api.monobank.ua"
+	baseURL        = "https://api.monobank.ua"
+	defaultTimeout = 30 * time.Second
 )
 
 type Client struct {
@@ -30,7 +31,7 @@ func New(client *http.Client) Client {
 	if client == nil {
 		// defaults
 		client = &http.Client{
-			Timeout: 30 * time.Second,
+			Timeout: defaultTimeout,
 		}
 	}
 
@@ -56,6 +57,7 @@ func (c Client) WithBaseURL(uri string) Client {
 // do does request.
 // Stores JSON response in the value pointed to by v.
 // TODO: make expectedStatusCode a slice:
+//nolint:unparam
 func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expectedStatusCode int) error {
 	// TODO: check that `v` is a pointer or nil
 
