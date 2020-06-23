@@ -40,6 +40,7 @@ func (c Client) Currency(ctx context.Context) (Currencies, error) {
 
 	var v Currencies
 	err = c.do(ctx, req, &v, http.StatusOK)
+
 	return v, err
 }
 
@@ -53,6 +54,7 @@ func (c Client) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 
 	var v ClientInfo
 	err = c.do(ctx, req, &v, http.StatusOK)
+
 	return &v, err
 }
 
@@ -70,6 +72,7 @@ func (c Client) Transactions(ctx context.Context, accountID string, from, to tim
 
 	var v Transactions
 	err = c.do(ctx, req, &v, http.StatusOK)
+
 	return v, err
 }
 
