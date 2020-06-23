@@ -1,0 +1,47 @@
+name: build
+on:
+  push:
+    tags:
+      - v*
+    branches:
+      - master
+  pull_request:
+jobs:
+  unit-tests:
+    name: unit-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Test
+        uses: cedrickring/golang-action/go1.14@1.5.2
+        with:
+          args: make test
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.txt
+          fail_ci_if_error: true
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v1
+        with:
+          # Required: the version of golangci-lint is required and must be specified without patch version: we always use the latest patch version.
+          version: v1.26
+
+          # Optional: working directory, useful for monorepos
+          # working-directory: somedir
+
+          # Optional: golangci-lint command line arguments.
+          args: >
+            --tests=false
+            -E bodyclose -E golint -E rowserrcheck -E gosec -E interfacer
+            -E unconvert -E dupl -E goconst -E gocognit -E goimports -E maligned -E unparam
+            -E dogsled -E prealloc -E gocritic -E wsl -E goprintffuncname -E gomnd
+
+          # Optional: show only new issues if it's a pull request. The default value is `false`.
+          # only-new-issues: true
