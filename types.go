@@ -16,7 +16,7 @@ type Account struct {
 	CurrencyCode int      `json:"currencyCode"`
 	CashbackType string   `json:"cashbackType"` // enum: None, UAH, Miles
 	CardMasks    []string `json:"maskedPan"`    // card number masks
-	CardType     CardType `json:"type"`
+	Type         CardType `json:"type"`
 }
 
 type CardType string
