@@ -21,7 +21,7 @@ const (
 type Client struct {
 	c       *http.Client
 	auth    Authorizer
-	baseURL string
+	baseURL string // TODO: switch to url.URL
 }
 
 // TODO: add WithOpts
