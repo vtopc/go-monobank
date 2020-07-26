@@ -45,9 +45,9 @@ func (c Client) Currency(ctx context.Context) (Currencies, error) {
 }
 
 func (c Client) ClientInfo(ctx context.Context) (*ClientInfo, error) {
-	const urlSuffix = "/personal/client-info"
+	const urlPath = "/personal/client-info"
 
-	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
+	req, err := http.NewRequest(http.MethodGet, urlPath, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -62,8 +62,8 @@ func (c Client) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 func (c Client) Transactions(ctx context.Context, accountID string, from, to time.Time) (
 	Transactions, error) {
 
-	const urlSuffix = "/personal/statement"
-	uri := fmt.Sprintf("%s/%s/%d/%d", urlSuffix, accountID, from.Unix(), to.Unix())
+	const urlPath = "/personal/statement"
+	uri := fmt.Sprintf("%s/%s/%d/%d", urlPath, accountID, from.Unix(), to.Unix())
 
 	req, err := http.NewRequest(http.MethodGet, uri, nil)
 	if err != nil {
@@ -77,7 +77,7 @@ func (c Client) Transactions(ctx context.Context, accountID string, from, to tim
 }
 
 func (c Client) SetWebHook(ctx context.Context, uri string) error {
-	const urlSuffix = "/personal/webhook"
+	const urlPath = "/personal/webhook"
 
 	var buf bytes.Buffer
 	err := json.NewEncoder(&buf).Encode(WebHookRequest{WebHookURL: uri})
@@ -85,7 +85,7 @@ func (c Client) SetWebHook(ctx context.Context, uri string) error {
 		return errors.Wrap(err, "failed to marshal")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, urlSuffix, &buf)
+	req, err := http.NewRequest(http.MethodPost, urlPath, &buf)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
