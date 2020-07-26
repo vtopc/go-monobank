@@ -6,6 +6,7 @@ import (
 
 type Authorizer interface {
 	// SetAuth modifies http.Request and sets authorization tokens
+	// TODO: rename to SetAuthHeader:
 	SetAuth(*http.Request)
 }
 
