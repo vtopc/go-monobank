@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -30,10 +31,16 @@ type PersonalAPI interface {
 	SetWebHook(ctx context.Context, uri string) error
 }
 
-func (c Client) Currency(ctx context.Context) (Currencies, error) {
-	const urlSuffix = "/bank/currency"
+type CorporateAPI interface {
+	PersonalAPI
+}
 
-	req, err := http.NewRequest(http.MethodGet, urlSuffix, nil)
+const urlPathAuth = "/personal/auth/request"
+
+func (c Client) Currency(ctx context.Context) (Currencies, error) {
+	const urlPath = "/bank/currency"
+
+	req, err := http.NewRequest(http.MethodGet, urlPath, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -86,6 +93,32 @@ func (c Client) SetWebHook(ctx context.Context, uri string) error {
 	}
 
 	req, err := http.NewRequest(http.MethodPost, urlPath, &buf)
+	if err != nil {
+		return errors.Wrap(err, "failed to create request")
+	}
+
+	return c.do(ctx, req, nil, http.StatusOK)
+}
+
+// Auth initializes access.
+func (c Client) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
+	req, err := http.NewRequest(http.MethodPost, urlPathAuth, nil)
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to create request")
+	}
+
+	req.Header.Set("X-Permissions", strings.Join(permissions, ""))
+	req.Header.Set("X-Callback", callbackURL)
+
+	var v TokenRequest
+	err = c.do(ctx, req, &v, http.StatusOK)
+
+	return &v, err
+}
+
+// CheckAuth checks status of request for client's personal data.
+func (c Client) CheckAuth(ctx context.Context) error {
+	req, err := http.NewRequest(http.MethodGet, urlPathAuth, nil)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
