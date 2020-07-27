@@ -72,3 +72,8 @@ type WebHookData struct {
 	AccountID   string      `json:"account"`
 	Transaction Transaction `json:"statementItem"`
 }
+
+type TokenRequest struct {
+	RequestID string `json:"tokenRequestId"` // Unique token request ID.
+	AcceptURL string `json:"acceptUrl"`      // URL to redirect client or build QR on top of it.
+}
