@@ -73,8 +73,11 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 
 	req = req.WithContext(ctx)
 
-	if c.auth != nil {
-		c.auth.SetAuth(req)
+	if c.auth != nil { // TODO: raise an error if not
+		err = c.auth.SetAuth(req)
+		if err != nil {
+			return errors.Wrap(err, "SetAuth")
+		}
 	}
 
 	if req.Body != nil {
