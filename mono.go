@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/pkg/errors"
@@ -101,13 +100,12 @@ func (c Client) SetWebHook(ctx context.Context, uri string) error {
 }
 
 // Auth initializes access.
-func (c Client) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
+func (c Client) Auth(ctx context.Context, callbackURL string) (*TokenRequest, error) {
 	req, err := http.NewRequest(http.MethodPost, urlPathAuth, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
 
-	req.Header.Set("X-Permissions", strings.Join(permissions, ""))
 	req.Header.Set("X-Callback", callbackURL)
 
 	var v TokenRequest
