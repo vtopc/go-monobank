@@ -32,6 +32,13 @@ type PersonalAPI interface {
 
 type CorporateAPI interface {
 	PersonalAPI
+
+	// Auth initializes access.
+	//  Use corporate authorizer for it
+	Auth(ctx context.Context, callbackURL string) (*TokenRequest, error)
+
+	// CheckAuth checks status of request for client's personal data.
+	CheckAuth(context.Context) error
 }
 
 const urlPathAuth = "/personal/auth/request"
@@ -99,7 +106,6 @@ func (c Client) SetWebHook(ctx context.Context, uri string) error {
 	return c.do(ctx, req, nil, http.StatusOK)
 }
 
-// Auth initializes access.
 func (c Client) Auth(ctx context.Context, callbackURL string) (*TokenRequest, error) {
 	req, err := http.NewRequest(http.MethodPost, urlPathAuth, nil)
 	if err != nil {
