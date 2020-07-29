@@ -44,8 +44,8 @@ func TestClient_Do(t *testing.T) {
 			defer server.Close()
 
 			c := Client{
-				baseURL: server.URL,
-				c:       server.Client(),
+				baseURL:    server.URL,
+				httpClient: server.Client(),
 			}
 
 			// strings.NewReader("req")

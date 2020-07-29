@@ -19,9 +19,9 @@ const (
 )
 
 type Client struct {
-	c       *http.Client
-	auth    Authorizer
-	baseURL string // TODO: switch to url.URL
+	httpClient *http.Client
+	auth       Authorizer
+	baseURL    string // TODO: switch to url.URL
 }
 
 // TODO: add WithOpts
@@ -36,9 +36,9 @@ func New(client *http.Client) Client {
 	}
 
 	return Client{
-		c:       client,
-		auth:    NewPublicAuthorizer(),
-		baseURL: baseURL,
+		httpClient: client,
+		auth:       NewPublicAuthorizer(),
+		baseURL:    baseURL,
 	}
 }
 
@@ -73,7 +73,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 
 	req = req.WithContext(ctx)
 
-	if c.auth != nil { // TODO: raise an error if not
+	if c.auth != nil { // TODO: return an error if not
 		err = c.auth.SetAuth(req)
 		if err != nil {
 			return errors.Wrap(err, "SetAuth")
@@ -84,38 +84,44 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 		req.Header.Set("Content-Type", "application/json")
 	}
 
-	resp, err := c.c.Do(req)
+	err = func() error {
+		resp, e := c.httpClient.Do(req)
+		if e != nil {
+			return e
+		}
+
+		defer resp.Body.Close()
+
+		var body []byte
+		if v != nil {
+			body, e = ioutil.ReadAll(resp.Body)
+			if e != nil {
+				return errors.Wrap(e, "couldn't read the body")
+			}
+		}
+
+		// TODO: switch to "for" for multi-status:
+		switch resp.StatusCode {
+		case expectedStatusCode:
+			if v == nil {
+				// nothing to unmarshal
+				return nil
+			}
+
+			e = json.Unmarshal(body, v)
+			if e == nil {
+				return nil
+			}
+
+			return errors.Wrap(e, "unmarshal")
+		}
+
+		e = errors.New(string(body))
+		return errors.Wrapf(e, "unexpected status code: %d, want: %d, body", resp.StatusCode, expectedStatusCode)
+	}()
 	if err != nil {
-		return errors.Wrapf(err, "failed to %s %s", req.Method, req.URL)
+		return errors.Wrapf(err, "request %s %s", req.Method, req.URL)
 	}
 
-	defer resp.Body.Close()
-
-	var body []byte
-	if v != nil {
-		body, err = ioutil.ReadAll(resp.Body)
-		if err != nil {
-			return errors.Wrap(err, "couldn't read the body")
-		}
-	}
-
-	switch resp.StatusCode {
-	case expectedStatusCode:
-		if v == nil {
-			// nothing to unmarshal
-			return nil
-		}
-
-		err = json.Unmarshal(body, v)
-		if err == nil {
-			return nil
-		}
-
-		err = errors.Wrap(err, "failed to unmarshal")
-
-	default:
-		err = errors.Errorf("unexpected status: %d", resp.StatusCode)
-	}
-
-	return errors.Wrapf(err, "errorBody: %s", string(body))
+	return nil
 }
