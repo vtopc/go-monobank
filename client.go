@@ -101,8 +101,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 		}
 
 		// TODO: switch to "for" for multi-status:
-		switch resp.StatusCode {
-		case expectedStatusCode:
+		if resp.StatusCode == expectedStatusCode {
 			if v == nil {
 				// nothing to unmarshal
 				return nil
