@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestClient_Do(t *testing.T) {
+func TestClient_do(t *testing.T) {
 	tests := map[string]struct {
 		method             string
 		urlPostfix         string
