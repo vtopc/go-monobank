@@ -20,6 +20,7 @@ type CorporateAPI interface {
 
 type CorporateClient struct {
 	commonClient
+	// TODO: add CorpAuthMaker
 }
 
 const urlPathAuth = "/personal/auth/request"
