@@ -24,8 +24,9 @@ func main(){
 }
 ```
 
-## Official docs
- - https://api.monobank.ua/docs/
+## Documentation
+- https://api.monobank.ua/docs/
+- https://gist.github.com/Sominemo/64845669d6326f2f73d356f025656bdb
 
 ## Similar projects
 - https://github.com/shal/mono
