@@ -26,8 +26,8 @@ type Client struct {
 
 // TODO: add WithOpts
 
-// New - returns new monobank Client
-func New(client *http.Client) Client {
+// NewClient - returns public monobank Client
+func NewClient(client *http.Client) Client {
 	if client == nil {
 		// defaults
 		client = &http.Client{
@@ -42,16 +42,13 @@ func New(client *http.Client) Client {
 	}
 }
 
-// WithAuth returns copy of Client with authorizer
-func (c Client) WithAuth(auth Authorizer) Client {
-	c.auth = auth
-	return c
+// WithBaseURL updates baseURL
+func (c *Client) WithBaseURL(uri string) {
+	c.baseURL = uri
 }
 
-// WithAuth returns copy of Client with overridden baseURL
-func (c Client) WithBaseURL(uri string) Client {
-	c.baseURL = uri
-	return c
+func (c *Client) withAuth(auth Authorizer) {
+	c.auth = auth
 }
 
 // do does request.
