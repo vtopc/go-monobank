@@ -109,14 +109,22 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 				return nil
 			}
 
-			return errors.Wrap(e, "failed to unmarshal error body")
+			return errors.Wrap(e, "failed to unmarshal body")
 		}
 
-		e = errors.New(string(body))
-		return errors.Wrapf(e, "unexpected status code %d(want %v)", resp.StatusCode, expectedStatusCode)
+		// otherwise, non expected status code:
+		return &APIError{
+			ResponseStatusCode:  resp.StatusCode,
+			ExpectedStatusCodes: []int{expectedStatusCode},
+			Err:                 errors.New(string(body)),
+		}
 	}()
 	if err != nil {
-		return errors.Wrapf(err, "request %s %s", req.Method, req.URL)
+		return &ReqError{
+			Method: req.Method,
+			URL:    req.URL,
+			Err:    err,
+		}
 	}
 
 	return nil
