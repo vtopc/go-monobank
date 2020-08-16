@@ -18,7 +18,11 @@ func (e *ReqError) Error() string {
 
 // Cause is causer interface(https://github.com/pkg/errors)
 func (e *ReqError) Cause() error {
-	// TODO: switch to std lib and Unwrap() interface
+	return e.Err
+}
+
+// Unwrap provides compatibility for Go 1.13 error chains.
+func (e *ReqError) Unwrap() error {
 	return e.Err
 }
 
@@ -35,5 +39,10 @@ func (e *APIError) Error() string {
 }
 
 func (e *APIError) Cause() error {
+	return e.Err
+}
+
+// Unwrap provides compatibility for Go 1.13 error chains.
+func (e *APIError) Unwrap() error {
 	return e.Err
 }
