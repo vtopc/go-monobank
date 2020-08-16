@@ -45,7 +45,7 @@ func (e *ReqError) Unwrap() error {
 type APIError struct {
 	ResponseStatusCode  int // HTTP status code
 	ExpectedStatusCodes []int
-	Err                 error // underlying error(cause), usually a body
+	Err                 error // underlying error(cause), a body as for now
 }
 
 func (e *APIError) Error() string {

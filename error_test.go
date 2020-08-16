@@ -35,11 +35,11 @@ func TestReqError(t *testing.T) {
 				Err: &APIError{
 					ResponseStatusCode:  400,
 					ExpectedStatusCodes: []int{200},
-					Err:                 errors.New("unmarshal"),
+					Err:                 errors.New(`{"errorDescription":"42"}`),
 				},
 			},
 			wantError:  "request GET http://example.com/call: unexpected status code 400(want [200]): unmarshal",
-			wantUnwrap: "unexpected status code 400(want [200]): unmarshal",
+			wantUnwrap: `unexpected status code 400(want [200]): {"errorDescription":"42"}`,
 		},
 	}
 
