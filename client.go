@@ -109,7 +109,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 				return nil
 			}
 
-			return errors.Wrap(e, "failed to unmarshal body")
+			return errors.Wrap(e, "failed to unmarshal response the body")
 		}
 
 		// otherwise, non expected status code:
