@@ -2,7 +2,10 @@ package monobank
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
+
+	"github.com/pkg/errors"
 )
 
 // ReqError request error
@@ -10,6 +13,18 @@ type ReqError struct {
 	Method string
 	URL    *url.URL
 	Err    error // underlying error(cause)
+}
+
+func NewReqError(req *http.Request, err error) error {
+	if req == nil {
+		return errors.New("empty request")
+	}
+
+	return &ReqError{
+		Method: req.Method,
+		URL:    req.URL,
+		Err:    err,
+	}
 }
 
 func (e *ReqError) Error() string {

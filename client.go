@@ -73,7 +73,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 	if c.auth != nil { // TODO: return an error if not
 		err = c.auth.SetAuth(req)
 		if err != nil {
-			return errors.Wrap(err, "SetAuth")
+			return NewReqError(req, errors.Wrap(err, "SetAuth"))
 		}
 	}
 
@@ -120,11 +120,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 		}
 	}()
 	if err != nil {
-		return &ReqError{
-			Method: req.Method,
-			URL:    req.URL,
-			Err:    err,
-		}
+		return NewReqError(req, err)
 	}
 
 	return nil
