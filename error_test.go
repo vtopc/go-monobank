@@ -19,7 +19,7 @@ func TestReqError(t *testing.T) {
 		wantError  string
 		wantUnwrap string
 	}{
-		"unmarshal": {
+		"short": {
 			err: &ReqError{
 				Method: http.MethodGet,
 				URL:    uri,
