@@ -12,7 +12,7 @@ import (
 type ReqError struct {
 	Method string
 	URL    *url.URL
-	Err    error // underlying error(cause)
+	Err    error // wrapped error
 }
 
 func NewReqError(req *http.Request, err error) error {
@@ -45,7 +45,7 @@ func (e *ReqError) Unwrap() error {
 type APIError struct {
 	ResponseStatusCode  int // HTTP status code
 	ExpectedStatusCodes []int
-	Err                 error // underlying error(cause), a body as for now
+	Err                 error // wrapped error, a body as for now
 }
 
 func (e *APIError) Error() string {
