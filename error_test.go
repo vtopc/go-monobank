@@ -15,21 +15,21 @@ func TestReqError(t *testing.T) {
 	require.NoError(t, err)
 
 	tests := map[string]struct {
-		v         *ReqError
-		wantError string
-		wantCause string
+		err        error
+		wantError  string
+		wantUnwrap string
 	}{
 		"unmarshal": {
-			v: &ReqError{
+			err: &ReqError{
 				Method: http.MethodGet,
 				URL:    uri,
 				Err:    errors.New("SetAuth"),
 			},
-			wantError: "request GET http://example.com/call: SetAuth",
-			wantCause: "SetAuth",
+			wantError:  "request GET http://example.com/call: SetAuth",
+			wantUnwrap: "SetAuth",
 		},
 		"nested": {
-			v: &ReqError{
+			err: &ReqError{
 				Method: http.MethodGet,
 				URL:    uri,
 				Err: &APIError{
@@ -38,19 +38,20 @@ func TestReqError(t *testing.T) {
 					Err:                 errors.New("unmarshal"),
 				},
 			},
-			wantError: "request GET http://example.com/call: unexpected status code 400(want [200]): unmarshal",
-			wantCause: "unexpected status code 400(want [200]): unmarshal",
+			wantError:  "request GET http://example.com/call: unexpected status code 400(want [200]): unmarshal",
+			wantUnwrap: "unexpected status code 400(want [200]): unmarshal",
 		},
 	}
 
 	for name, tt := range tests {
 		t.Run(name, func(t *testing.T) {
 			t.Run("Error()", func(t *testing.T) {
-				assert.Equal(t, tt.v.Error(), tt.wantError)
+				assert.EqualError(t, tt.err, tt.wantError)
 			})
 
-			t.Run("Cause()", func(t *testing.T) {
-				assert.EqualError(t, tt.v.Cause(), tt.wantCause)
+			t.Run("Unwrap()", func(t *testing.T) {
+				got := errors.Unwrap(tt.err)
+				assert.EqualError(t, got, tt.wantUnwrap)
 			})
 		})
 	}
