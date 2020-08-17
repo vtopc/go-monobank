@@ -38,7 +38,7 @@ func TestReqError(t *testing.T) {
 					Err:                 errors.New(`{"errorDescription":"42"}`),
 				},
 			},
-			wantError:  "request GET http://example.com/call: unexpected status code 400(want [200]): unmarshal",
+			wantError:  `request GET http://example.com/call: unexpected status code 400(want [200]): {"errorDescription":"42"}`,
 			wantUnwrap: `unexpected status code 400(want [200]): {"errorDescription":"42"}`,
 		},
 	}
