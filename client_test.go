@@ -63,3 +63,14 @@ func TestClient_do(t *testing.T) {
 func hasSuffix(t *testing.T, s, suffix string) {
 	assert.Truef(t, strings.HasSuffix(s, suffix), "expected '%s' to ends with suffix '%s'", s, suffix)
 }
+
+func TestClient_withAuth(t *testing.T) {
+	c := newCommonClient(nil)
+
+	auth := PersAuth{
+		token: "123",
+	}
+
+	c.withAuth(auth)
+	assert.Equal(t, auth, c.auth)
+}
