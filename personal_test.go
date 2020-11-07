@@ -18,6 +18,6 @@ func TestPersonalClient_WithAuth(t *testing.T) {
 		token: "123",
 	}
 
-	c.WithAuth(auth)
-	assert.Equal(t, auth, c.auth)
+	authClient := c.WithAuth(auth)
+	assert.Equal(t, auth, authClient.auth)
 }
