@@ -11,6 +11,13 @@ import (
 	"github.com/pkg/errors"
 )
 
+type CommonAPI interface {
+	PublicAPI
+
+	// SetWebHook - sets webhook for statements
+	SetWebHook(ctx context.Context, uri string) error
+}
+
 // commonClient contains common to Personal and Corporate API
 type commonClient struct {
 	Client
