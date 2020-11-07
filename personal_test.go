@@ -12,9 +12,7 @@ func TestClient_PersonalAPI(t *testing.T) {
 }
 
 func TestPersonalClient_WithAuth(t *testing.T) {
-	c := PersonalClient{
-		commonClient: newCommonClient(nil),
-	}
+	c := NewPersonalClient(nil)
 
 	auth := PersAuth{
 		token: "123",
