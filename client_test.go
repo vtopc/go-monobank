@@ -65,7 +65,7 @@ func hasSuffix(t *testing.T, s, suffix string) {
 }
 
 func TestClient_withAuth(t *testing.T) {
-	c := newCommonClient(nil)
+	c := NewClient(nil)
 
 	auth := PersAuth{
 		token: "123",
