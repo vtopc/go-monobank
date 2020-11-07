@@ -1,12 +1,25 @@
-package monobank_test
+package monobank
 
 import (
 	"testing"
 
-	"github.com/vtopc/go-monobank"
+	"github.com/stretchr/testify/assert"
 )
 
 // checks that Client satisfies interface
 func TestClient_PersonalAPI(t *testing.T) {
-	var _ monobank.PersonalAPI = monobank.PersonalClient{}
+	var _ PersonalAPI = PersonalClient{}
+}
+
+func TestPersonalClient_WithAuth(t *testing.T) {
+	c := PersonalClient{
+		commonClient: newCommonClient(nil),
+	}
+
+	auth := PersAuth{
+		token: "123",
+	}
+
+	c.WithAuth(auth)
+	assert.Equal(t, auth, c.auth)
 }
