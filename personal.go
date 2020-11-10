@@ -7,7 +7,7 @@ import (
 )
 
 type PersonalAPI interface {
-	PublicAPI
+	CommonAPI
 
 	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
 	ClientInfo(context.Context) (*ClientInfo, error)
@@ -15,9 +15,6 @@ type PersonalAPI interface {
 	// Transactions - gets bank account statements(transations)
 	// https://api.monobank.ua/docs/#/definitions/StatementItems
 	Transactions(ctx context.Context, accountID string, from, to time.Time) (Transactions, error)
-
-	// SetWebHook - sets webhook for statements
-	SetWebHook(ctx context.Context, uri string) error
 }
 
 type PersonalClient struct {
@@ -30,14 +27,14 @@ func NewPersonalClient(client *http.Client) PersonalClient {
 	}
 }
 
-func (c PersonalClient) SetWebHook(ctx context.Context, uri string) error {
-	const urlPath = "/personal/webhook"
-
-	return c.setWebHook(ctx, uri, urlPath)
-}
-
 // WithAuth returns copy of PersonalClient with authorizer
 func (c PersonalClient) WithAuth(auth Authorizer) PersonalClient {
 	c.withAuth(auth)
 	return c
+}
+
+func (c PersonalClient) SetWebHook(ctx context.Context, uri string) error {
+	const urlPath = "/personal/webhook"
+
+	return c.setWebHook(ctx, uri, urlPath)
 }

@@ -42,6 +42,7 @@ jobs:
             -E bodyclose -E golint -E rowserrcheck -E gosec -E interfacer
             -E unconvert -E dupl -E goconst -E gocognit -E goimports -E maligned -E unparam
             -E dogsled -E prealloc -E gocritic -E goprintffuncname -E gomnd
+            --exclude="G505","G401"
           # TODO: -E wsl
 
           # Optional: show only new issues if it's a pull request. The default value is `false`.

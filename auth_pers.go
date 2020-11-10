@@ -8,11 +8,11 @@ const (
 	personalTokenKey = "X-Token"
 )
 
-type PersonalAuthorizer struct {
+type PersAuth struct {
 	token string
 }
 
-func (a PersonalAuthorizer) SetAuth(req *http.Request) error {
+func (a PersAuth) SetAuth(req *http.Request) error {
 	if req == nil {
 		return nil
 	}
@@ -22,6 +22,6 @@ func (a PersonalAuthorizer) SetAuth(req *http.Request) error {
 	return nil
 }
 
-func NewPersonalAuthorizer(token string) PersonalAuthorizer {
-	return PersonalAuthorizer{token: token}
+func NewPersonalAuthorizer(token string) PersAuth {
+	return PersAuth{token: token}
 }

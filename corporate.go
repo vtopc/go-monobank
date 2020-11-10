@@ -3,35 +3,56 @@ package monobank
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/pkg/errors"
 )
 
 type CorporateAPI interface {
-	PersonalAPI
+	CommonAPI
 
 	// Auth initializes access.
-	//  Use corporate authorizer for it
-	Auth(ctx context.Context, callbackURL string) (*TokenRequest, error)
+	// https://api.monobank.ua/docs/corporate.html#operation--personal-auth-request-post
+	Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error)
 
 	// CheckAuth checks status of request for client's personal data.
-	CheckAuth(context.Context) error
+	// https://api.monobank.ua/docs/corporate.html#operation--personal-auth-request-get
+	CheckAuth(ctx context.Context, requestID string) error
+
+	// ClientInfo - https://api.monobank.ua/docs/corporate.html#operation--personal-client-info-get
+	ClientInfo(ctx context.Context, requestID string) (*ClientInfo, error)
+
+	// Transactions - gets bank account statements(transactions)
+	// https://api.monobank.ua/docs/corporate.html#operation--personal-statement--account---from---to--get
+	Transactions(ctx context.Context, requestID, accountID string, from, to time.Time) (Transactions, error)
+}
+
+type CorpAuthMakerAPI interface {
+	New(requestID string) Authorizer
+	NewPermissions(permissions ...string) Authorizer
 }
 
 type CorporateClient struct {
 	commonClient
-	// TODO: add CorpAuthMaker
+	authMaker CorpAuthMakerAPI
 }
 
 const urlPathAuth = "/personal/auth/request"
 
-func NewCorporateClient(client *http.Client) CorporateClient {
+// NewCorporateClient returns corporate client
+func NewCorporateClient(client *http.Client, authMaker CorpAuthMakerAPI) (CorporateClient, error) {
+	if authMaker == nil {
+		return CorporateClient{}, errors.New("authMaker is nil")
+	}
+
 	return CorporateClient{
 		commonClient: newCommonClient(client),
-	}
+		authMaker:    authMaker,
+	}, nil
 }
 
-func (c CorporateClient) Auth(ctx context.Context, callbackURL string) (*TokenRequest, error) {
+// Auth initializes access.
+func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
 	req, err := http.NewRequest(http.MethodPost, urlPathAuth, nil)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
@@ -39,30 +60,49 @@ func (c CorporateClient) Auth(ctx context.Context, callbackURL string) (*TokenRe
 
 	req.Header.Set("X-Callback", callbackURL)
 
+	authClient := c.withAuth(c.authMaker.NewPermissions(permissions...))
+
 	var v TokenRequest
-	err = c.do(ctx, req, &v, http.StatusOK)
+	err = authClient.commonClient.do(ctx, req, &v, http.StatusOK)
 
 	return &v, err
 }
 
-// CheckAuth checks status of request for client's personal data.
-func (c CorporateClient) CheckAuth(ctx context.Context) error {
+func (c CorporateClient) CheckAuth(ctx context.Context, requestID string) error {
 	req, err := http.NewRequest(http.MethodGet, urlPathAuth, nil)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
 
-	return c.do(ctx, req, nil, http.StatusOK)
+	authClient := c.withAuth(c.authMaker.New(requestID))
+
+	return authClient.do(ctx, req, nil, http.StatusOK)
 }
 
+// SetWebHook sets webhook for corporate API.
 func (c CorporateClient) SetWebHook(ctx context.Context, uri string) error {
 	const urlPath = "/personal/corp/webhook"
 
-	return c.setWebHook(ctx, uri, urlPath)
+	authClient := c.withAuth(c.authMaker.New(""))
+
+	return authClient.setWebHook(ctx, uri, urlPath)
 }
 
-// WithAuth returns copy of CorporateClient with authorizer
-func (c CorporateClient) WithAuth(auth Authorizer) CorporateClient {
-	c.withAuth(auth)
+func (c CorporateClient) ClientInfo(ctx context.Context, requestID string) (*ClientInfo, error) {
+	authClient := c.withAuth(c.authMaker.New(requestID))
+
+	return authClient.commonClient.ClientInfo(ctx)
+}
+
+func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID string, from, to time.Time) (Transactions, error) {
+	authClient := c.withAuth(c.authMaker.New(requestID))
+
+	return authClient.commonClient.Transactions(ctx, accountID, from, to)
+}
+
+// withAuth returns copy of CorporateClient with authorizer
+// TODO: remove?
+func (c CorporateClient) withAuth(auth Authorizer) CorporateClient {
+	c.commonClient.withAuth(auth)
 	return c
 }
