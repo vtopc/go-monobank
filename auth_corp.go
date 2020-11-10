@@ -154,6 +154,7 @@ func decodePrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 			if err != nil {
 				return nil, err
 			}
+
 			return ret, err
 		}
 	}
