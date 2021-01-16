@@ -54,7 +54,6 @@ func (c *Client) withAuth(auth Authorizer) {
 // do does request.
 // Stores JSON response in the value pointed to by v.
 // TODO: make expectedStatusCode a slice:
-//nolint:unparam
 func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expectedStatusCode int) error {
 	// TODO: check that `v` is a pointer or nil
 
