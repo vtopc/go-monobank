@@ -33,7 +33,8 @@ func TestNewCorpAuthMaker(t *testing.T) {
 			wantKeyID: keyID,
 		},
 		"negative": {
-			secKey:  []byte("invalid"),
+			secKey: []byte("invalid"),
+			//nolint:goerr113
 			wantErr: errors.New("failed to decode private key"),
 		},
 	}
