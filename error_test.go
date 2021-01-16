@@ -23,10 +23,10 @@ func TestReqError(t *testing.T) {
 			err: &ReqError{
 				Method: http.MethodGet,
 				URL:    uri,
-				Err:    errors.New("SetAuth"),
+				Err:    errors.New("test error"),
 			},
-			wantError:  "request GET http://example.com/call: SetAuth",
-			wantUnwrap: "SetAuth",
+			wantError:  "request GET http://example.com/call: test error",
+			wantUnwrap: "test error",
 		},
 		"nested": {
 			err: &ReqError{
@@ -44,6 +44,8 @@ func TestReqError(t *testing.T) {
 	}
 
 	for name, tt := range tests {
+		tt := tt
+
 		t.Run(name, func(t *testing.T) {
 			t.Run("Error()", func(t *testing.T) {
 				assert.EqualError(t, tt.err, tt.wantError)

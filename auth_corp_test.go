@@ -33,12 +33,15 @@ func TestNewCorpAuthMaker(t *testing.T) {
 			wantKeyID: keyID,
 		},
 		"negative": {
-			secKey:  []byte("invalid"),
+			secKey: []byte("invalid"),
+			//nolint:goerr113
 			wantErr: errors.New("failed to decode private key"),
 		},
 	}
 
 	for name, tt := range tests {
+		tt := tt
+
 		t.Run(name, func(t *testing.T) {
 			got, err := NewCorpAuthMaker(tt.secKey)
 			if tt.wantErr != nil {
@@ -95,6 +98,8 @@ func (s *CorpAuthSuite) Test_sign() {
 	s.Require().True(ok)
 
 	for name, tt := range tests {
+		tt := tt
+
 		s.Run(name, func() {
 			got, err := auth.sign(tt.timestamp, tt.actor, tt.urlPath)
 			if tt.wantErr != nil {
