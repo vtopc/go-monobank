@@ -44,6 +44,8 @@ func TestReqError(t *testing.T) {
 	}
 
 	for name, tt := range tests {
+		tt := tt
+
 		t.Run(name, func(t *testing.T) {
 			t.Run("Error()", func(t *testing.T) {
 				assert.EqualError(t, tt.err, tt.wantError)
