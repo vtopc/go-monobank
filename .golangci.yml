@@ -28,7 +28,7 @@ linters:
     - lll
     - misspell
     - nakedret
-    - noctx
+    #- noctx # TODO: enable
     - nolintlint
     - rowserrcheck
     - scopelint
