@@ -12,7 +12,7 @@ type PersonalAPI interface {
 	// ClientInfo - https://api.monobank.ua/docs/#/definitions/UserInfo
 	ClientInfo(context.Context) (*ClientInfo, error)
 
-	// Transactions - gets bank account statements(transations)
+	// Transactions - gets bank account statements
 	// https://api.monobank.ua/docs/#/definitions/StatementItems
 	Transactions(ctx context.Context, accountID string, from, to time.Time) (Transactions, error)
 }
