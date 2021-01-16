@@ -40,7 +40,6 @@ linters:
     - unparam
     - unused
     - varcheck
-    - whitespace
     - prealloc
     - goerr113
     - gocognit
@@ -54,6 +53,7 @@ linters:
   # - nestif
   # - testpackage
   # - wsl
+  # - whitespace
 
 linters-settings:
   depguard:
