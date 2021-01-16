@@ -23,10 +23,10 @@ func TestReqError(t *testing.T) {
 			err: &ReqError{
 				Method: http.MethodGet,
 				URL:    uri,
-				Err:    errors.New("SetAuth"),
+				Err:    errors.New("test error"),
 			},
-			wantError:  "request GET http://example.com/call: SetAuth",
-			wantUnwrap: "SetAuth",
+			wantError:  "request GET http://example.com/call: test error",
+			wantUnwrap: "test error",
 		},
 		"nested": {
 			err: &ReqError{
