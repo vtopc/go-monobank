@@ -17,6 +17,7 @@ type Account struct {
 	CashbackType string   `json:"cashbackType"` // enum: None, UAH, Miles
 	CardMasks    []string `json:"maskedPan"`    // card number masks
 	Type         CardType `json:"type"`
+	IBAN         string   `json:"iban"`
 }
 
 type CardType string
@@ -25,6 +26,7 @@ const (
 	Black    CardType = "black"
 	White    CardType = "white"
 	Platinum CardType = "platinum"
+	FOP      CardType = "fop"
 )
 
 type Accounts []Account
@@ -43,6 +45,9 @@ type Transaction struct {
 	CashbackAmount  int64         `json:"cashbackAmount"`
 	Balance         int64         `json:"balance"`
 	Comment         string        `json:"comment"`
+	ReceiptID       string        `json:"receiptId"`
+	EDRPOU          string        `json:"counterEdrpou"`
+	IBAN            string        `json:"counterIban"`
 }
 
 // Transactions - transactions
