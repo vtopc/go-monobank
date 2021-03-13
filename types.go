@@ -37,6 +37,7 @@ type Transaction struct {
 	Time            epoch.Seconds `json:"time"`
 	Description     string        `json:"description"`
 	MCC             int32         `json:"mcc"`
+	OriginalMCC     int32         `json:"originalMcc"`
 	Hold            bool          `json:"hold"`
 	Amount          int64         `json:"amount"`
 	OperationAmount int64         `json:"operationAmount"`
