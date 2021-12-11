@@ -30,6 +30,7 @@ linters:
     - nakedret
     #- noctx # TODO: enable
     - nolintlint
+    - nlreturn
     - prealloc
     - revive
     - rowserrcheck

@@ -104,5 +104,6 @@ func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID 
 // TODO: remove?
 func (c CorporateClient) withAuth(auth Authorizer) CorporateClient {
 	c.commonClient.withAuth(auth)
+
 	return c
 }
