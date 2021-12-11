@@ -48,7 +48,7 @@ func TestClient_do(t *testing.T) {
 				httpClient: server.Client(),
 			}
 
-			req, err := http.NewRequest(tc.method, tc.urlPostfix, nil)
+			req, err := http.NewRequest(tc.method, tc.urlPostfix, http.NoBody)
 			require.NoError(t, err)
 
 			// test:

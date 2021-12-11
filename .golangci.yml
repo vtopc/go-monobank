@@ -20,7 +20,6 @@ linters:
     - goerr113
     - gofmt
     - goimports
-    - gomnd
     - goprintffuncname
     - gosec
     - gosimple
@@ -125,6 +124,12 @@ issues:
   exclude:
     - G505 # sha1
     - G401 # sha1
+
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 50
 
 #run:
 #  skip-dirs:
