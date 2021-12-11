@@ -10,28 +10,30 @@ linters:
     - dupl
     - errcheck
     - exhaustive
+    - exportloopref
     - funlen
     - gochecknoinits
+    - gocognit
     - goconst
     - gocritic
     - gocyclo
+    - goerr113
     - gofmt
     - goimports
-    - golint
     - gomnd
     - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
     - misspell
     - nakedret
     #- noctx # TODO: enable
     - nolintlint
+    - prealloc
+    - revive
     - rowserrcheck
-    - scopelint
     - staticcheck
     - structcheck
     - stylecheck
@@ -40,10 +42,6 @@ linters:
     - unparam
     - unused
     - varcheck
-    - prealloc
-    - goerr113
-    - gocognit
-    - maligned
 
   # disabled:
   # - asciicheck
