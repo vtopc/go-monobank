@@ -5,7 +5,7 @@ package monobank
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -90,7 +90,7 @@ func (c Client) do(ctx context.Context, req *http.Request, v interface{}, expect
 
 		var body []byte
 		if v != nil {
-			body, e = ioutil.ReadAll(resp.Body)
+			body, e = io.ReadAll(resp.Body)
 			if e != nil {
 				return errors.Wrap(e, "couldn't read the body")
 			}

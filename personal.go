@@ -30,6 +30,7 @@ func NewPersonalClient(client *http.Client) PersonalClient {
 // WithAuth returns copy of PersonalClient with authorizer
 func (c PersonalClient) WithAuth(auth Authorizer) PersonalClient {
 	c.withAuth(auth)
+
 	return c
 }
 

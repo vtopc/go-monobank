@@ -32,7 +32,7 @@ func newCommonClient(client *http.Client) commonClient {
 func (c commonClient) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 	const urlPath = "/personal/client-info"
 
-	req, err := http.NewRequest(http.MethodGet, urlPath, nil)
+	req, err := http.NewRequest(http.MethodGet, urlPath, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -50,7 +50,7 @@ func (c commonClient) Transactions(ctx context.Context, accountID string, from, 
 	const urlPath = "/personal/statement"
 	uri := fmt.Sprintf("%s/%s/%d/%d", urlPath, accountID, from.Unix(), to.Unix())
 
-	req, err := http.NewRequest(http.MethodGet, uri, nil)
+	req, err := http.NewRequest(http.MethodGet, uri, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
