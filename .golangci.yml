@@ -10,28 +10,30 @@ linters:
     - dupl
     - errcheck
     - exhaustive
+    - exportloopref
     - funlen
     - gochecknoinits
+    - gocognit
     - goconst
     - gocritic
     - gocyclo
+    - goerr113
     - gofmt
     - goimports
-    - golint
-    - gomnd
     - goprintffuncname
     - gosec
     - gosimple
     - govet
     - ineffassign
-    - interfacer
     - lll
     - misspell
     - nakedret
     #- noctx # TODO: enable
     - nolintlint
+    - nlreturn
+    - prealloc
+    - revive
     - rowserrcheck
-    - scopelint
     - staticcheck
     - structcheck
     - stylecheck
@@ -40,10 +42,6 @@ linters:
     - unparam
     - unused
     - varcheck
-    - prealloc
-    - goerr113
-    - gocognit
-    - maligned
 
   # disabled:
   # - asciicheck
@@ -127,6 +125,12 @@ issues:
   exclude:
     - G505 # sha1
     - G401 # sha1
+
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 50
 
 #run:
 #  skip-dirs:

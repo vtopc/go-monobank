@@ -186,7 +186,6 @@ func parseECPrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 	priv.Curve = curve
 	priv.D = k
 
-	//nolint:gomnd
 	privateKey := make([]byte, (curveOrder.BitLen()+7)/8)
 
 	// Some private keys have leading zero padding. This is invalid

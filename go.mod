@@ -1,6 +1,6 @@
 module github.com/vtopc/go-monobank
 
-go 1.14
+go 1.16
 
 require (
 	github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0

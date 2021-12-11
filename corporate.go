@@ -53,7 +53,7 @@ func NewCorporateClient(client *http.Client, authMaker CorpAuthMakerAPI) (Corpor
 
 // Auth initializes access.
 func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
-	req, err := http.NewRequest(http.MethodPost, urlPathAuth, nil)
+	req, err := http.NewRequest(http.MethodPost, urlPathAuth, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -69,7 +69,7 @@ func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissio
 }
 
 func (c CorporateClient) CheckAuth(ctx context.Context, requestID string) error {
-	req, err := http.NewRequest(http.MethodGet, urlPathAuth, nil)
+	req, err := http.NewRequest(http.MethodGet, urlPathAuth, http.NoBody)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
@@ -104,5 +104,6 @@ func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID 
 // TODO: remove?
 func (c CorporateClient) withAuth(auth Authorizer) CorporateClient {
 	c.commonClient.withAuth(auth)
+
 	return c
 }
