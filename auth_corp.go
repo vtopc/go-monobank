@@ -22,10 +22,12 @@ import (
 
 // Permissions.
 const (
-	// PermSt - statements(transactions) and client info
+	// PermSt - statements(transactions) and client info of individual(фізичної особи).
 	PermSt = "s"
-	// PermPI - personal information(first and last names)
+	// PermPI - personal information(first and last names).
 	PermPI = "p"
+	// PermFOP - statements(transactions) and client info of private entrepreneur(ФОП).
+	PermFOP = "f"
 )
 
 type CorpAuthMaker struct {
