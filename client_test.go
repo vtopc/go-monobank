@@ -1,7 +1,6 @@
 package monobank
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -9,6 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"github.com/vtopc/go-rest"
 )
 
 func TestClient_do(t *testing.T) {
@@ -45,14 +45,14 @@ func TestClient_do(t *testing.T) {
 
 			c := Client{
 				baseURL:    server.URL,
-				httpClient: server.Client(),
+				restClient: rest.NewClient(server.Client()),
 			}
 
 			req, err := http.NewRequest(tc.method, tc.urlPostfix, http.NoBody)
 			require.NoError(t, err)
 
 			// test:
-			err = c.do(context.Background(), req, &tc.v, tc.expectedStatusCode)
+			err = c.do(req, &tc.v, tc.expectedStatusCode)
 			require.NoError(t, err)
 			assert.Equal(t, tc.want, tc.v)
 		})

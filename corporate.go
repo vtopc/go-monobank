@@ -53,7 +53,7 @@ func NewCorporateClient(client *http.Client, authMaker CorpAuthMakerAPI) (Corpor
 
 // Auth initializes access.
 func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
-	req, err := http.NewRequest(http.MethodPost, urlPathAuth, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, urlPathAuth, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
@@ -63,20 +63,20 @@ func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissio
 	authClient := c.withAuth(c.authMaker.NewPermissions(permissions...))
 
 	var v TokenRequest
-	err = authClient.commonClient.do(ctx, req, &v, http.StatusOK)
+	err = authClient.commonClient.do(req, &v, http.StatusOK)
 
 	return &v, err
 }
 
 func (c CorporateClient) CheckAuth(ctx context.Context, requestID string) error {
-	req, err := http.NewRequest(http.MethodGet, urlPathAuth, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPathAuth, http.NoBody)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
 
 	authClient := c.withAuth(c.authMaker.New(requestID))
 
-	return authClient.do(ctx, req, nil, http.StatusOK)
+	return authClient.do(req, nil, http.StatusOK)
 }
 
 // SetWebHook sets webhook for corporate API.
