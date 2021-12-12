@@ -32,13 +32,13 @@ func newCommonClient(client *http.Client) commonClient {
 func (c commonClient) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 	const urlPath = "/personal/client-info"
 
-	req, err := http.NewRequest(http.MethodGet, urlPath, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPath, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
 
 	var v ClientInfo
-	err = c.do(ctx, req, &v, http.StatusOK)
+	err = c.do(req, &v, http.StatusOK)
 
 	return &v, err
 }
@@ -50,13 +50,13 @@ func (c commonClient) Transactions(ctx context.Context, accountID string, from, 
 	const urlPath = "/personal/statement"
 	uri := fmt.Sprintf("%s/%s/%d/%d", urlPath, accountID, from.Unix(), to.Unix())
 
-	req, err := http.NewRequest(http.MethodGet, uri, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri, http.NoBody)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to create request")
 	}
 
 	var v Transactions
-	err = c.do(ctx, req, &v, http.StatusOK)
+	err = c.do(req, &v, http.StatusOK)
 
 	return v, err
 }
@@ -68,10 +68,10 @@ func (c commonClient) setWebHook(ctx context.Context, uri, urlPath string) error
 		return errors.Wrap(err, "failed to marshal")
 	}
 
-	req, err := http.NewRequest(http.MethodPost, urlPath, &buf)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, urlPath, &buf)
 	if err != nil {
 		return errors.Wrap(err, "failed to create request")
 	}
 
-	return c.do(ctx, req, nil, http.StatusOK)
+	return c.do(req, nil, http.StatusOK)
 }
