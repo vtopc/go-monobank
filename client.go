@@ -8,6 +8,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/vtopc/go-rest"
+	"github.com/vtopc/go-rest/defaults"
+	"github.com/vtopc/go-rest/interceptors"
 )
 
 const (
@@ -24,6 +26,11 @@ type Client struct {
 
 // NewClient - returns public monobank Client
 func NewClient(client *http.Client) Client {
+	if client == nil {
+		client = defaults.NewHTTPClient()
+	}
+
+	_ = interceptors.SetReqContentType(client, "application/json")
 	c := rest.NewClient(client)
 
 	return Client{
@@ -61,11 +68,6 @@ func (c Client) do(req *http.Request, v interface{}, expectedStatusCode int) err
 		if err != nil {
 			return errors.Wrap(err, "SetAuth")
 		}
-	}
-
-	// TODO: move into go-rest.interceptors:
-	if req.Body != nil {
-		req.Header.Set("Content-Type", "application/json")
 	}
 
 	err = c.restClient.Do(req, v, expectedStatusCode)
