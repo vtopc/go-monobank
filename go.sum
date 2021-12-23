@@ -18,8 +18,6 @@ github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5Cc
 github.com/stretchr/testify v1.7.0/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
 github.com/vtopc/epoch v1.0.0 h1:C9lSFt9DC/J0YlW3Eheq4vBBi0pk2hjC8XFb3indWlw=
 github.com/vtopc/epoch v1.0.0/go.mod h1:/jzmj/iiCMyAiIk3T6RGPUpMpPSjUJDG2Yu7FzfEt8U=
-github.com/vtopc/go-rest v0.2.0 h1:ZdNndlwzk1NjWbKf8yHGo8Bn1DRolWAtuPbIBvAVN5k=
-github.com/vtopc/go-rest v0.2.0/go.mod h1:t7XPUz57Z+U66vsVIjEm89Uw/NZf486JVAFhq6+mZps=
 github.com/vtopc/go-rest v0.2.1 h1:34OzSZywJ0tRkGsW9BGTyNXT3IpbhgfzD47TOyB6v/0=
 github.com/vtopc/go-rest v0.2.1/go.mod h1:t7XPUz57Z+U66vsVIjEm89Uw/NZf486JVAFhq6+mZps=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=

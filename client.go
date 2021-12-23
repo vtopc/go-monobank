@@ -3,10 +3,11 @@ package monobank
 // TODO: add HTTP retry
 
 import (
+	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
 
-	"github.com/pkg/errors"
 	"github.com/vtopc/go-rest"
 	"github.com/vtopc/go-rest/defaults"
 	"github.com/vtopc/go-rest/interceptors"
@@ -15,6 +16,8 @@ import (
 const (
 	baseURL = "https://api.monobank.ua"
 )
+
+var ErrEmptyRequest = errors.New("empty request")
 
 type Client struct {
 	restClient *rest.Client
@@ -54,19 +57,19 @@ func (c *Client) withAuth(auth Authorizer) {
 // TODO: make expectedStatusCode a slice:
 func (c Client) do(req *http.Request, v interface{}, expectedStatusCode int) error {
 	if req == nil {
-		return errors.New("empty request")
+		return ErrEmptyRequest
 	}
 
 	var err error
 	req.URL, err = url.Parse(c.baseURL + req.URL.String())
 	if err != nil {
-		return errors.Wrap(err, "failed to build URL")
+		return fmt.Errorf("failed to build URL: %w", err)
 	}
 
 	if c.auth != nil { // TODO: return an error if not
 		err = c.auth.SetAuth(req)
 		if err != nil {
-			return errors.Wrap(err, "SetAuth")
+			return fmt.Errorf("SetAuth: %w", err)
 		}
 	}
 

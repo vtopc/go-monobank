@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
 
 type CommonAPI interface {
@@ -34,7 +32,7 @@ func (c commonClient) ClientInfo(ctx context.Context) (*ClientInfo, error) {
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPath, http.NoBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create request")
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	var v ClientInfo
@@ -52,7 +50,7 @@ func (c commonClient) Transactions(ctx context.Context, accountID string, from, 
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, uri, http.NoBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create request")
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	var v Transactions
@@ -65,12 +63,12 @@ func (c commonClient) setWebHook(ctx context.Context, uri, urlPath string) error
 	var buf bytes.Buffer
 	err := json.NewEncoder(&buf).Encode(WebHookRequest{WebHookURL: uri})
 	if err != nil {
-		return errors.Wrap(err, "failed to marshal")
+		return fmt.Errorf("failed to marshal: %w", err)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, urlPath, &buf)
 	if err != nil {
-		return errors.Wrap(err, "failed to create request")
+		return fmt.Errorf("failed to create request: %w", err)
 	}
 
 	return c.do(req, nil, http.StatusOK)

@@ -2,9 +2,8 @@ package monobank
 
 import (
 	"context"
+	"fmt"
 	"net/http"
-
-	"github.com/pkg/errors"
 )
 
 type PublicAPI interface {
@@ -17,7 +16,7 @@ func (c Client) Currency(ctx context.Context) (Currencies, error) {
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPath, http.NoBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create request")
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	var v Currencies

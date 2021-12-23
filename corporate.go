@@ -2,11 +2,13 @@ package monobank
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"net/http"
 	"time"
-
-	"github.com/pkg/errors"
 )
+
+var ErrEmptyAuthMaker = errors.New("authMaker is nil")
 
 type CorporateAPI interface {
 	CommonAPI
@@ -42,7 +44,7 @@ const urlPathAuth = "/personal/auth/request"
 // NewCorporateClient returns corporate client
 func NewCorporateClient(client *http.Client, authMaker CorpAuthMakerAPI) (CorporateClient, error) {
 	if authMaker == nil {
-		return CorporateClient{}, errors.New("authMaker is nil")
+		return CorporateClient{}, ErrEmptyAuthMaker
 	}
 
 	return CorporateClient{
@@ -55,7 +57,7 @@ func NewCorporateClient(client *http.Client, authMaker CorpAuthMakerAPI) (Corpor
 func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, urlPathAuth, http.NoBody)
 	if err != nil {
-		return nil, errors.Wrap(err, "failed to create request")
+		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	req.Header.Set("X-Callback", callbackURL)
@@ -71,7 +73,7 @@ func (c CorporateClient) Auth(ctx context.Context, callbackURL string, permissio
 func (c CorporateClient) CheckAuth(ctx context.Context, requestID string) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPathAuth, http.NoBody)
 	if err != nil {
-		return errors.Wrap(err, "failed to create request")
+		return fmt.Errorf("failed to create request: %w", err)
 	}
 
 	authClient := c.withAuth(c.authMaker.New(requestID))

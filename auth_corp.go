@@ -10,6 +10,8 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/pem"
+	"errors"
+	"fmt"
 	"math/big"
 	"net/http"
 	"strconv"
@@ -17,7 +19,6 @@ import (
 	"time"
 
 	"github.com/decred/dcrd/dcrec/secp256k1/v2"
-	"github.com/pkg/errors"
 )
 
 // Permissions.
@@ -28,6 +29,15 @@ const (
 	PermPI = "p"
 	// PermFOP - statements(transactions) and client info of private entrepreneur(ФОП).
 	PermFOP = "f"
+)
+
+// Errors.
+var (
+	ErrDecodePrivateKey  = errors.New("failed to decode private key")
+	ErrEncodePublicKey   = errors.New("failed to encode public key with sha1")
+	ErrNoPrivateKey      = errors.New("failed to find private key block")
+	ErrInvalidEC         = errors.New("invalid elliptic curve private key value")
+	ErrInvalidPrivateKey = errors.New("invalid private key length")
 )
 
 type CorpAuthMaker struct {
@@ -50,14 +60,14 @@ const (
 func NewCorpAuthMaker(secKey []byte) (*CorpAuthMaker, error) {
 	privateKey, err := decodePrivateKey(secKey)
 	if err != nil {
-		return nil, errors.New("failed to decode private key")
+		return nil, ErrDecodePrivateKey
 	}
 
 	publicKey := privateKey.PublicKey
 	data := elliptic.Marshal(publicKey, publicKey.X, publicKey.Y)
 	hash := sha1.New()
 	if _, err := hash.Write(data); err != nil {
-		return nil, errors.New("failed to encode public key with sha1")
+		return nil, ErrEncodePublicKey
 	}
 	keyID := hex.EncodeToString(hash.Sum(nil))
 
@@ -108,7 +118,7 @@ func (a CorpAuth) SetAuth(r *http.Request) error {
 
 	sign, err := a.sign(timestamp, actor, r.URL.Path)
 	if err != nil {
-		return errors.Wrap(err, "calculate Sign")
+		return fmt.Errorf("calculate Sign: %w", err)
 	}
 
 	r.Header.Set("X-Key-Id", a.KeyID)
@@ -161,7 +171,7 @@ func decodePrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 		}
 	}
 
-	return nil, errors.New("failed to find private key block")
+	return nil, ErrNoPrivateKey
 }
 
 // parseECPrivateKey returns Elliptic Curve Digital Signature Algorithm private key from file content.
@@ -169,17 +179,18 @@ func decodePrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 func parseECPrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 	var privKey ecPrivateKey
 	if _, err := asn1.Unmarshal(b, &privKey); err != nil {
-		return nil, errors.New("failed to parse EC private key: " + err.Error())
+		return nil, fmt.Errorf("failed to parse EC private key: %w", err)
 	}
 	if privKey.Version != ecPrivateKeyVersion {
-		return nil, errors.Errorf("unknown EC private key version %d", privKey.Version)
+		//nolint:goerr113
+		return nil, fmt.Errorf("unknown EC private key version %d", privKey.Version)
 	}
 
 	curve := secp256k1.S256()
 	k := new(big.Int).SetBytes(privKey.PrivateKey)
 	curveOrder := curve.Params().N
 	if k.Cmp(curveOrder) >= 0 {
-		return nil, errors.New("invalid elliptic curve private key value")
+		return nil, ErrInvalidEC
 	}
 
 	priv := new(ecdsa.PrivateKey)
@@ -192,7 +203,7 @@ func parseECPrivateKey(b []byte) (*ecdsa.PrivateKey, error) {
 	// according to [SEC1], but this code will ignore it.
 	for len(privKey.PrivateKey) > len(privateKey) {
 		if privKey.PrivateKey[0] != 0 {
-			return nil, errors.New("invalid private key length")
+			return nil, ErrInvalidPrivateKey
 		}
 		privKey.PrivateKey = privKey.PrivateKey[1:]
 	}
