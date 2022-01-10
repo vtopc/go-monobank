@@ -3,7 +3,9 @@ package monobank
 import "github.com/vtopc/epoch"
 
 // ClientInfo - client/user info
+// https://api.monobank.ua/docs/#/definitions/UserInfo
 type ClientInfo struct {
+	ID         string   `json:"id"`
 	Name       string   `json:"name"`
 	WebHookURL string   `json:"webHookUrl"`
 	Accounts   Accounts `json:"accounts"`
