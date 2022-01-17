@@ -30,7 +30,11 @@ type CorporateAPI interface {
 }
 
 type CorpAuthMakerAPI interface {
+	// New returns corp Authorizer for endpoints with Request ID.
 	New(requestID string) Authorizer
+
+	// NewPermissions returns corp Authorizer for Auth endpoint to get Request ID.
+	// Omitting permissions means all permissions.
 	NewPermissions(permissions ...string) Authorizer
 }
 

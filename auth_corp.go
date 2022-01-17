@@ -77,7 +77,6 @@ func NewCorpAuthMaker(secKey []byte) (*CorpAuthMaker, error) {
 	}, nil
 }
 
-// New returns corp Authorizer for endpoints with Request ID.
 func (c *CorpAuthMaker) New(requestID string) Authorizer {
 	return CorpAuth{
 		CorpAuthMaker: c,
@@ -85,7 +84,6 @@ func (c *CorpAuthMaker) New(requestID string) Authorizer {
 	}
 }
 
-// NewPermissions returns corp Authorizer for Auth endpoint to get Request ID
 func (c *CorpAuthMaker) NewPermissions(permissions ...string) Authorizer {
 	return CorpAuth{
 		CorpAuthMaker: c,
