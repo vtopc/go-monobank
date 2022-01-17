@@ -17,3 +17,9 @@ $(GOLINT):
 .PHONY: lint
 lint: $(GOLINT)
 	$(GOLINT) run
+
+.PHONY: update-api
+update-api: ## Upgrade deps
+	go get github.com/vtopc/go-rest
+	go get github.com/vtopc/epoch
+	@$(MAKE) deps
