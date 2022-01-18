@@ -30,7 +30,7 @@ const (
 	White    CardType = "white"    //
 	Platinum CardType = "platinum" //
 	FOP      CardType = "fop"      // ФОП
-	EAid     CardType = "eAid"     // єПідртимка
+	EAid     CardType = "eAid"     // єПідтримка
 )
 
 type Accounts []Account
