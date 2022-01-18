@@ -26,10 +26,11 @@ type Account struct {
 type CardType string
 
 const (
-	Black    CardType = "black"
-	White    CardType = "white"
-	Platinum CardType = "platinum"
-	FOP      CardType = "fop"
+	Black    CardType = "black"    //
+	White    CardType = "white"    //
+	Platinum CardType = "platinum" //
+	FOP      CardType = "fop"      // ФОП
+	EAid     CardType = "eAid"     // єПідртимка
 )
 
 type Accounts []Account
