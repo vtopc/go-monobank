@@ -65,6 +65,7 @@ type Transaction struct {
 	Balance         int64         `json:"balance"`
 	Comment         string        `json:"comment"`
 	ReceiptID       string        `json:"receiptId"`
+	InvoiceID       string        `json:"invoiceId"`
 	EDRPOU          string        `json:"counterEdrpou"`
 	IBAN            string        `json:"counterIban"`
 }
