@@ -14,6 +14,7 @@ type ClientInfo struct {
 
 type Account struct {
 	AccountID    string   `json:"id"`
+	SendID       string   `json:"sendId"`
 	Balance      int64    `json:"balance"`
 	CreditLimit  int64    `json:"creditLimit"`
 	CurrencyCode int      `json:"currencyCode"`
