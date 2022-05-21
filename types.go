@@ -10,6 +10,7 @@ type ClientInfo struct {
 	Name       string   `json:"name"`
 	WebHookURL string   `json:"webHookUrl"`
 	Accounts   Accounts `json:"accounts"`
+	Jars       Jars     `json:"jars"`
 }
 
 type Account struct {
@@ -24,6 +25,16 @@ type Account struct {
 	IBAN         string   `json:"iban"`
 }
 
+type Jar struct {
+	ID           string `json:"id"`
+	SendID       string `json:"sendId"`
+	Title        string `json:"title"`
+	Description  string `json:"description"`
+	CurrencyCode int    `json:"currencyCode"`
+	Balance      int64  `json:"balance"`
+	Goal         int64  `json:"goal"`
+}
+
 type CardType string
 
 const (
@@ -35,6 +46,8 @@ const (
 )
 
 type Accounts []Account
+
+type Jars []Jar
 
 // Transaction - bank account statement
 type Transaction struct {

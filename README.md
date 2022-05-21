@@ -3,9 +3,20 @@
 [![Godoc Reference][godoc-img]][godoc-url] [![CI][ci-img]][ci-url] [![codecov][codecov-img]][codecov-url]
 
 Monobank REST API client.
-Supports personal(with Token) and corporate authorizations.
 
-## Usage
+## Features
+- Personal API(with Token authorization).
+- Corporate API(with authorization).
+- Webhooks(including the Corporate API).
+- Jars.
+
+## Installation
+```shell
+go get github.com/vtopc/go-rest
+```
+This will update yours go.mod file.
+
+## Usage examples
 NOTE: Do not forget to check errors.
 
 #### Public client
