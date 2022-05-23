@@ -8,7 +8,7 @@ Monobank REST API client.
 - Personal API(with Token authorization).
 - Corporate API(with authorization).
 - Webhooks(including the Corporate API).
-- Jars.
+- Jars(only in Personal API).
 
 ## Installation
 ```shell
