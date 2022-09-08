@@ -6,9 +6,9 @@ Monobank REST API client.
 
 ## Features
 - Personal API(with Token authorization).
-- Corporate API(with authorization).
-- Webhooks(including the Corporate API).
-- Jars.
+- API for providers(corporate) with authorization.
+- Webhooks(including API for providers).
+- Jars(only in Personal API).
 
 ## Installation
 ```shell
@@ -74,8 +74,8 @@ import (
 )
 
 var secKey []byte // put here you private key
-    
-const webhook = "http://example.com/webhook"
+
+const webhook = "https://example.com/webhook"
 
 func main() {
     // Create auth creator.
@@ -101,7 +101,7 @@ func main() {
 
 ## Documentation
 - Official - https://api.monobank.ua/docs/
-- Unofficial - https://gist.github.com/Sominemo/64845669d6326f2f73d356f025656bdb
+- Unofficial - https://gist.github.com/Sominemo/8714a82e26a268c30e4a332b0b2fd943
 
 ## Similar projects
 - https://github.com/shal/mono
