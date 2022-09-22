@@ -12,7 +12,7 @@ Monobank REST API client.
 
 ## Installation
 ```shell
-go get github.com/vtopc/go-rest
+go get github.com/vtopc/go-monobank
 ```
 This will update yours go.mod file.
 
