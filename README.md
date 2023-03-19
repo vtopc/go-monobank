@@ -100,8 +100,8 @@ func main() {
 ```
 
 ## Documentation
-- Official - https://api.monobank.ua/docs/
-- Unofficial - https://gist.github.com/Sominemo/8714a82e26a268c30e4a332b0b2fd943
+- [Official](https://api.monobank.ua/docs/)
+- [Unofficial](https://gist.github.com/Sominemo/8714a82e26a268c30e4a332b0b2fd943)
 
 ## Similar projects
 - https://github.com/shal/mono
