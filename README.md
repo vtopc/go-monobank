@@ -12,7 +12,7 @@ Monobank REST API client.
 
 ## Installation
 ```shell
-go get github.com/vtopc/go-rest
+go get github.com/vtopc/go-monobank@latest
 ```
 This will update yours go.mod file.
 
@@ -100,11 +100,11 @@ func main() {
 ```
 
 ## Documentation
-- Official - https://api.monobank.ua/docs/
-- Unofficial - https://gist.github.com/Sominemo/8714a82e26a268c30e4a332b0b2fd943
+- [Official](https://api.monobank.ua/docs/)
+- [Unofficial](https://gist.github.com/Sominemo/8714a82e26a268c30e4a332b0b2fd943)
 
 ## Similar projects
-- https://github.com/shal/mono
+- https://github.com/shal/mono (last update 16.05.2020)
 - https://github.com/artemrys/go-monobank-api (no corporate API)
 
 ## TODO
