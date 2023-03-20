@@ -7,7 +7,7 @@ import (
 )
 
 // checks that Client satisfies interface
-func TestClient_PersonalAPI(t *testing.T) {
+func TestClient_PersonalAPI(_ *testing.T) {
 	var _ PersonalAPI = PersonalClient{}
 }
 
