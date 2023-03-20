@@ -8,7 +8,7 @@ import (
 )
 
 // checks that Client satisfies interface
-func TestClient_CorporateClient(t *testing.T) {
+func TestClient_CorporateClient(_ *testing.T) {
 	var _ CorporateAPI = CorporateClient{}
 }
 
