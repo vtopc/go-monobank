@@ -14,10 +14,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.16
+          go-version-file: ./go.mod
+          cache: true # caching and restoring go modules and build outputs
 
       - name: Test
         run: make test
@@ -32,6 +33,20 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: ./go.mod
+          cache: true # caching and restoring go modules and build outputs
+
+      - name: Check that 'go mod tidy' was called before commit
+        run: go mod tidy && git diff --exit-code
+
       - name: golangci-lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.52
+          skip-cache: true # cache/restore is done by actions/setup-go step
