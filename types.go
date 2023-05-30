@@ -67,10 +67,14 @@ type Transaction struct {
 	CashbackAmount int64  `json:"cashbackAmount"`
 	Balance        int64  `json:"balance"`
 	Comment        string `json:"comment"`
-	ReceiptID      string `json:"receiptId"`
-	InvoiceID      string `json:"invoiceId"`
-	EDRPOU         string `json:"counterEdrpou"`
-	IBAN           string `json:"counterIban"`
+	// For withdrawal only.
+	ReceiptID string `json:"receiptId"`
+	// For fop(ФОП) accounts only.
+	InvoiceID string `json:"invoiceId"`
+	// For fop(ФОП) accounts only.
+	EDRPOU string `json:"counterEdrpou"`
+	// For fop(ФОП) accounts only.
+	IBAN string `json:"counterIban"`
 }
 
 // Transactions - transactions
