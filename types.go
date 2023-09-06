@@ -111,9 +111,9 @@ type TokenRequest struct {
 }
 
 type CorpSettings struct {
-	Pubkey     []byte `json:"pubkey"`
-	Name       string `json:"name"`
-	Permission string `json:"permission"`
-	Logo       []byte `json:"logo"`
-	Webhook    string `json:"webhook"`
+	Pubkey     string  `json:"pubkey"`
+	Name       string  `json:"name"`
+	Permission string  `json:"permission"`
+	Logo       string  `json:"logo"`
+	Webhook    *string `json:"webhook"`
 }
