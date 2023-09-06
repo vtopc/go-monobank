@@ -13,7 +13,7 @@ var ErrEmptyAuthMaker = errors.New("authMaker is nil")
 type CorporateAPI interface {
 	CommonAPI
 
-	// Settings
+	// Settings returns information about company.
 	// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1corp~1settings/get
 	Settings(ctx context.Context) (*CorpSettings, error)
 
@@ -111,8 +111,6 @@ func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID 
 	return authClient.commonClient.Transactions(ctx, accountID, from, to)
 }
 
-// Settings
-// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1corp~1settings/get
 func (c CorporateClient) Settings(ctx context.Context) (*CorpSettings, error) {
 	const urlPath = "/personal/corp/settings"
 
