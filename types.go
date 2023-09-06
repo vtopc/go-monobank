@@ -109,3 +109,11 @@ type TokenRequest struct {
 	RequestID string `json:"tokenRequestId"` // Unique token request ID.
 	AcceptURL string `json:"acceptUrl"`      // URL to redirect client or build QR on top of it.
 }
+
+type CorpSettings struct {
+	Pubkey     []byte `json:"pubkey"`
+	Name       string `json:"name"`
+	Permission string `json:"permission"`
+	Logo       []byte `json:"logo"`
+	Webhook    string `json:"webhook"`
+}

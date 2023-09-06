@@ -13,19 +13,24 @@ var ErrEmptyAuthMaker = errors.New("authMaker is nil")
 type CorporateAPI interface {
 	CommonAPI
 
-	// Auth initializes access.
-	// https://api.monobank.ua/docs/corporate.html#operation--personal-auth-request-post
+	// Settings
+	// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1corp~1settings/get
+	Settings(ctx context.Context) (*CorpSettings, error)
+
+	// Auth initializes client access.
+	// https://api.monobank.ua/docs/corporate.html#tag/Kliyentski-personalni-dani/paths/~1personal~1auth~1request/post
 	Auth(ctx context.Context, callbackURL string, permissions ...string) (*TokenRequest, error)
 
 	// CheckAuth checks status of request for client's personal data.
-	// https://api.monobank.ua/docs/corporate.html#operation--personal-auth-request-get
+	// https://api.monobank.ua/docs/corporate.html#tag/Kliyentski-personalni-dani/paths/~1personal~1auth~1request/get
 	CheckAuth(ctx context.Context, requestID string) error
 
-	// ClientInfo - https://api.monobank.ua/docs/corporate.html#operation--personal-client-info-get
+	// ClientInfo
+	// https://api.monobank.ua/docs/corporate.html#tag/Kliyentski-personalni-dani/paths/~1personal~1client-info/get
 	ClientInfo(ctx context.Context, requestID string) (*ClientInfo, error)
 
 	// Transactions - gets bank account statements(transactions)
-	// https://api.monobank.ua/docs/corporate.html#operation--personal-statement--account---from---to--get
+	// https://api.monobank.ua/docs/corporate.html#tag/Kliyentski-personalni-dani/paths/~1personal~1statement~1{account}~1{from}~1{to}/get
 	Transactions(ctx context.Context, requestID, accountID string, from, to time.Time) (Transactions, error)
 }
 
@@ -104,6 +109,24 @@ func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID 
 	authClient := c.withAuth(c.authMaker.New(requestID))
 
 	return authClient.commonClient.Transactions(ctx, accountID, from, to)
+}
+
+// Settings
+// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1corp~1settings/get
+func (c CorporateClient) Settings(ctx context.Context) (*CorpSettings, error) {
+	const urlPath = "/personal/corp/settings"
+
+	authClient := c.withAuth(c.authMaker.New(""))
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, urlPath, http.NoBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	var v CorpSettings
+	err = authClient.do(req, &v, http.StatusOK)
+
+	return &v, err
 }
 
 // withAuth returns copy of CorporateClient with authorizer
