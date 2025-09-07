@@ -50,5 +50,5 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.52
+          version: v1.64.8
           skip-cache: true # cache/restore is done by actions/setup-go step

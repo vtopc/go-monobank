@@ -12,7 +12,7 @@ deps:
 # linter:
 GOLINT = $(GOPATH)/bin/golangci-lint
 $(GOLINT):
-	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin v1.52.0
+	curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(GOPATH)/bin v1.64.8
 
 NILAWAY = $(GOPATH)/bin/nilaway
 $(NILAWAY):
