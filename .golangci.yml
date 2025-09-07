@@ -4,9 +4,10 @@ linters:
   disable-all: true
   enable:
     - errcheck
-    - ineffassign
-    - gosec
     - nilerr
+    - ineffassign
+    - staticcheck
+    - gosec
     - bodyclose
 
     - dogsled
@@ -31,7 +32,6 @@ linters:
     - prealloc
     - revive
     - rowserrcheck
-    - staticcheck
     - stylecheck
     - unconvert
     - unparam
