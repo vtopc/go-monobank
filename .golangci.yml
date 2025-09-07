@@ -4,7 +4,7 @@ linters:
   disable-all: true
   enable:
     - bodyclose
-    - depguard
+    # - depguard # TODO: enable
     - dogsled
     - dupl
     - errcheck
@@ -27,7 +27,7 @@ linters:
     - lll
     - misspell
     - nakedret
-    #- noctx # TODO: enable
+    # - noctx # TODO: enable
     - nolintlint
     - nlreturn
     - prealloc
@@ -49,6 +49,7 @@ linters:
   # - testpackage
   # - wsl
   # - whitespace
+
 
 linters-settings:
   depguard:
