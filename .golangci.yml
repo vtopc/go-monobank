@@ -3,27 +3,26 @@ linters:
   # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
   disable-all: true
   enable:
+    - errcheck
+    - ineffassign
+    - gosec
+
     - bodyclose
     # - depguard # TODO: enable
     - dogsled
     - dupl
-    - errcheck
+    - err113
     - exhaustive
-    - exportloopref
     - funlen
     - gochecknoinits
     - gocognit
     - goconst
     - gocritic
     - gocyclo
-    - goerr113
-    - gofmt
     - goimports
     - goprintffuncname
-    - gosec
     - gosimple
     - govet
-    - ineffassign
     - lll
     - misspell
     - nakedret
@@ -35,7 +34,6 @@ linters:
     - rowserrcheck
     - staticcheck
     - stylecheck
-    - typecheck
     - unconvert
     - unparam
     - unused
