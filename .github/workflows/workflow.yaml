@@ -9,7 +9,15 @@ on:
 jobs:
   unit-tests:
     name: unit-tests
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version:
+          - 1.23.x
+          - 1.24.x
+          # TODO: migrate to golangci-lint to v2 first:
+          # - 1.25.x
+        os: [ ubuntu-latest ]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -17,7 +25,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v4
         with:
-          go-version-file: ./go.mod
+          go-version: ${{ matrix.go-version }}
           cache: true # caching and restoring go modules and build outputs
 
       - name: Test
