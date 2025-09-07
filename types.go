@@ -41,8 +41,11 @@ const (
 	Black    CardType = "black"    //
 	White    CardType = "white"    //
 	Platinum CardType = "platinum" //
+	Iron     CardType = "iron"     //
 	FOP      CardType = "fop"      // ФОП
+	Yellow   CardType = "yellow"   //
 	EAid     CardType = "eAid"     // єПідтримка
+	Diia     CardType = "diia"     // Дія.Картка
 )
 
 type Accounts []Account
