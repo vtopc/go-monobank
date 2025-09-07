@@ -29,6 +29,8 @@ const (
 	PermPI = "p"
 	// PermFOP - statements(transactions) and client info of private entrepreneur(ФОП).
 	PermFOP = "f"
+	// PermJars - client info of jars.
+	PermJars = "j"
 )
 
 // Errors.
