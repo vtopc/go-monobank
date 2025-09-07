@@ -114,6 +114,9 @@ func (a CorpAuth) SetAuth(r *http.Request) error {
 
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 
+	if r.URL == nil {
+		return errors.New("missing URL in request")
+	}
 	sign, err := a.sign(timestamp, actor, r.URL.Path)
 	if err != nil {
 		return fmt.Errorf("calculate Sign: %w", err)
