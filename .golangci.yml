@@ -50,7 +50,6 @@ linters:
   # - wsl
   # - whitespace
 
-
 linters-settings:
   depguard:
     #list-type: blacklist
