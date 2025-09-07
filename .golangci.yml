@@ -6,9 +6,9 @@ linters:
     - errcheck
     - ineffassign
     - gosec
-
+    - nilerr
     - bodyclose
-    # - depguard # TODO: enable
+
     - dogsled
     - dupl
     - err113
@@ -37,6 +37,7 @@ linters:
     - unconvert
     - unparam
     - unused
+    # - depguard # TODO: enable
 
   # disabled:
   # - asciicheck
