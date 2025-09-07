@@ -104,16 +104,19 @@ func (a CorpAuth) SetAuth(r *http.Request) error {
 
 	var actor string
 	switch {
-	case len(a.requestID) > 0:
+	case a.requestID != "":
 		actor = a.requestID
 		r.Header.Set("X-Request-Id", actor)
-	case len(a.permissions) > 0:
+	case a.permissions != "":
 		actor = a.permissions
 		r.Header.Set("X-Permissions", actor)
 	}
 
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 
+	if r.URL == nil {
+		return errors.New("missing URL in request")
+	}
 	sign, err := a.sign(timestamp, actor, r.URL.Path)
 	if err != nil {
 		return fmt.Errorf("calculate Sign: %w", err)
