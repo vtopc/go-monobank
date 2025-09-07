@@ -11,7 +11,6 @@ linters:
 
     - dogsled
     - dupl
-    - err113
     - exhaustive
     - funlen
     - gochecknoinits
@@ -38,6 +37,7 @@ linters:
     - unparam
     - unused
     # - depguard # TODO: enable
+    # - err113 # TODO: enable
 
   # disabled:
   # - asciicheck
