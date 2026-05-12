@@ -18,6 +18,15 @@ var (
 	ErrMissingPubKey = errors.New("missing public key")
 )
 
+// Verify is a convenience wrapper around VerifyWebhookSignature using this
+// key as the verifier.
+func (k *ServerKey) Verify(body []byte, xSign string) error {
+	if k == nil {
+		return ErrMissingPubKey
+	}
+	return VerifyWebhookSignature(k.PubKey, body, xSign)
+}
+
 // VerifyWebhookSignature returns nil iff the X-Sign header is a valid ECDSA
 // signature of body produced by the bank's serverPubKey.
 //
