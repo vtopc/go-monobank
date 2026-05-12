@@ -1,6 +1,23 @@
 package monobank
 
-import "github.com/vtopc/epoch"
+import (
+	"crypto/ecdsa"
+	"time"
+
+	"github.com/vtopc/epoch"
+)
+
+// ServerKey is the bank's current public key plus its identifier and
+// the server's clock at the time of the call. Returned by Client.ServerKey().
+type ServerKey struct {
+	// ID is the key identifier, identical to the X-Key-Id header sent with
+	// webhooks. Compare against the incoming header to know when to refresh.
+	ID string
+	// PubKey is the parsed secp256k1 ECDSA public key.
+	PubKey *ecdsa.PublicKey
+	// ServerTime is the bank's clock; useful to detect clock skew.
+	ServerTime time.Time
+}
 
 // ClientInfo - client/user info
 // Personal API - https://api.monobank.ua/docs/#/definitions/UserInfo

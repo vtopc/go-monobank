@@ -9,6 +9,7 @@ Monobank REST API client.
 - API for providers(corporate) with authorization.
 - Webhooks(including API for providers).
 - Jars(only in Personal API).
+- Webhook signature verification (ECDSA secp256k1) via the bank's public key.
 
 ## Installation
 ```shell
@@ -96,6 +97,69 @@ func main() {
     // If user authorized already:
     response, _ := client.ClientInfo(context.Background(), requestID)
     fmt.Println(response)
+}
+```
+
+#### Verifying webhook signatures
+Mono signs each webhook with ECDSA over secp256k1. Fetch the bank's public key
+from `/bank/sync` once and use it to verify every incoming request:
+```go
+package main
+
+import (
+    "context"
+    "io"
+    "log"
+    "net/http"
+    "sync"
+
+    "github.com/vtopc/go-monobank"
+)
+
+func main() {
+    client := monobank.NewClient(nil)
+
+    var (
+        mu  sync.RWMutex
+        key *monobank.ServerKey
+    )
+    refresh := func() error {
+        sk, err := client.ServerKey(context.Background())
+        if err != nil {
+            return err
+        }
+        mu.Lock()
+        key = sk
+        mu.Unlock()
+        return nil
+    }
+    if err := refresh(); err != nil {
+        log.Fatal(err)
+    }
+
+    http.HandleFunc("/webhook", func(w http.ResponseWriter, r *http.Request) {
+        body, _ := io.ReadAll(r.Body)
+
+        mu.RLock()
+        k := key
+        mu.RUnlock()
+        // If X-Key-Id no longer matches, mono rotated the key — refresh and retry.
+        if r.Header.Get("X-Key-Id") != k.ID {
+            if err := refresh(); err == nil {
+                mu.RLock()
+                k = key
+                mu.RUnlock()
+            }
+        }
+
+        if err := monobank.VerifyWebhookSignature(k.PubKey, body, r.Header.Get("X-Sign")); err != nil {
+            http.Error(w, "bad signature", http.StatusUnauthorized)
+            return
+        }
+        // ... process body as monobank.WebHookResponse
+        w.WriteHeader(http.StatusOK)
+    })
+    log.Fatal(http.ListenAndServe(":8080", nil))
 }
 ```
 
