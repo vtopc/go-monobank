@@ -1,7 +1,9 @@
 package monobank
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -16,6 +18,12 @@ type CorporateAPI interface {
 	// Settings returns information about company.
 	// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1corp~1settings/get
 	Settings(ctx context.Context) (*CorpSettings, error)
+
+	// RegistrationStatus checks whether a corporate-API registration has
+	// been approved by the bank. pubkeyPEM is the PEM-encoded secp256k1
+	// public key originally submitted via /personal/auth/registration.
+	// https://api.monobank.ua/docs/corporate.html#tag/Avtorizaciya-ta-nalashtuvannya-kompaniyi/paths/~1personal~1auth~1registration~1status/post
+	RegistrationStatus(ctx context.Context, pubkeyPEM []byte) (*RegistrationStatusResponse, error)
 
 	// Auth initializes client access.
 	// https://api.monobank.ua/docs/corporate.html#tag/Kliyentski-personalni-dani/paths/~1personal~1auth~1request/post
@@ -109,6 +117,29 @@ func (c CorporateClient) Transactions(ctx context.Context, requestID, accountID 
 	authClient := c.withAuth(c.authMaker.New(requestID))
 
 	return authClient.commonClient.Transactions(ctx, accountID, from, to)
+}
+
+func (c CorporateClient) RegistrationStatus(ctx context.Context, pubkeyPEM []byte) (
+	*RegistrationStatusResponse, error) {
+
+	const urlPath = "/personal/auth/registration/status"
+
+	body, err := json.Marshal(RegistrationStatusRequest{Pubkey: pubkeyPEM})
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal: %w", err)
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, urlPath, bytes.NewReader(body))
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %w", err)
+	}
+
+	authClient := c.withAuth(c.authMaker.New(""))
+
+	var v RegistrationStatusResponse
+	err = authClient.do(req, &v, http.StatusOK)
+
+	return &v, err
 }
 
 func (c CorporateClient) Settings(ctx context.Context) (*CorpSettings, error) {
