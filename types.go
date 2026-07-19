@@ -43,7 +43,7 @@ const (
 	Platinum CardType = "platinum" //
 	Iron     CardType = "iron"     //
 	FOP      CardType = "fop"      // ФОП
-	Yellow   CardType = "yellow"   //
+	Yellow   CardType = "yellow"   // Дитяча
 	EAid     CardType = "eAid"     // єПідтримка
 	Diia     CardType = "diia"     // Дія.Картка
 )
