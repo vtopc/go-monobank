@@ -8,6 +8,7 @@ Monobank REST API client.
 - Personal API(with Token authorization).
 - API for providers(corporate) with authorization.
 - Webhooks(including API for providers).
+- Webhook signature verification (ECDSA secp256k1) via [Client.ServerKey] and [VerifyWebhookSignature]; see `examples/webhook`.
 - Jars(only in Personal API).
 
 ## Installation

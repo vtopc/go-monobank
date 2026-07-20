@@ -1,6 +1,24 @@
 package monobank
 
-import "github.com/vtopc/epoch"
+import (
+	"crypto/ecdsa"
+	"time"
+
+	"github.com/vtopc/epoch"
+)
+
+// ServerKey is the bank's current ECDSA (secp256k1) public key together with
+// its identifier and the server time at the moment of the call. Returned by
+// [Client.ServerKey] and consumed by [VerifyWebhookSignature] / [ServerKey.Verify].
+//
+// The X-Key-Id header on every incoming webhook equals [ServerKey.ID] for the
+// key that signed it; when it stops matching, mono has rotated the key and
+// the caller should re-fetch.
+type ServerKey struct {
+	ID         string
+	PubKey     *ecdsa.PublicKey
+	ServerTime time.Time
+}
 
 // ClientInfo - client/user info
 // Personal API - https://api.monobank.ua/docs/#/definitions/UserInfo
@@ -98,8 +116,14 @@ type WebHookRequest struct {
 	WebHookURL string `json:"webHookUrl"`
 }
 
+// Known WebHookResponse.Type values.
+const (
+	// WebHookTypeStatementItem — a single bank-account statement entry.
+	WebHookTypeStatementItem = "StatementItem"
+)
+
 type WebHookResponse struct {
-	Type string      `json:"type"` // "StatementItem"
+	Type string      `json:"type"` // see WebHookType* constants
 	Data WebHookData `json:"data"`
 }
 
