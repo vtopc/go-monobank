@@ -18,7 +18,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/decred/dcrd/dcrec/secp256k1/v2"
+	secp256k1 "github.com/decred/dcrd/dcrec/secp256k1/v4"
 )
 
 // Permissions.
